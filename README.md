@@ -1,31 +1,73 @@
 # luci-theme-darkstrap
 
-A high-contrast dark theme for OpenWrt LuCI, built on top of the official Bootstrap theme.
+A simple, clutter-free, and easy-to-use dark theme for OpenWrt LuCI.
 
-Designed for readability in low-light environments, with clear visual hierarchy, distinct status badges, and zero external dependencies.
+Built for everyday router administration with high contrast, calm dark aesthetics, and zero visual noise.
 
-## Preview
+## Clutter-Free Design
 
-![Walkthrough](screenshots/demo.gif)
+Standard LuCI pages often display multiple paragraphs of explanatory text under every single input field, which crowds the interface. Darkstrap moves field descriptions behind clickable indicator badges, keeping configuration forms clean and readable while keeping documentation accessible when needed.
 
-## Comparison with Stock LuCI Bootstrap
+### DNS & DHCP Configuration (Stock vs Darkstrap)
 
-| Page | Stock Bootstrap vs Darkstrap |
-| :--- | :--- |
-| **System Overview** | ![Overview Comparison](screenshots/comparison_overview.png) |
-| **Wireless Interfaces** | ![Wireless Comparison](screenshots/comparison_wireless.png) |
-| **Firewall Zones** | ![Firewall Comparison](screenshots/comparison_firewall.png) |
-| **Realtime Bandwidth** | ![Realtime Comparison](screenshots/comparison_realtime.png) |
+![DNS Comparison](screenshots/comparison_dns.png)
 
-## Key Changes
+When help is needed, clicking any indicator reveals the field description in place:
 
-- Deep obsidian background with warm amber action accents.
-- Preserves 100% of upstream LuCI DOM structure and accessibility semantics.
-- Replaces raw checkboxes in firewall and service views with animated toggle switches.
-- Field help descriptions tucked behind clickable `?` indicators to reduce visual noise.
-- Distinct color-coded badges for network interfaces (green LAN, red WAN, blue bridges).
-- Hardware-accelerated SVG realtime bandwidth curves with legible contrast.
-- Fully responsive across mobile, tablet, and desktop viewports.
+![DNS Help Revealed](screenshots/dns_disclosed.png)
+
+## Screenshots
+
+### System Overview
+
+Hardware platform, firmware version, system load, and memory allocation.
+
+![System Overview](screenshots/overview.png)
+
+### Wireless Management
+
+Dual-band radio configuration (2.4 GHz and 5 GHz), channel allocation, signal meters, and associated stations.
+
+![Wireless Management](screenshots/wireless.png)
+
+### Firewall Zone Settings
+
+General security policies, animated state toggles, and color-coded network zones (green LAN, red WAN).
+
+![Firewall Settings](screenshots/firewall.png)
+
+### Realtime Bandwidth Monitoring
+
+Live SVG traffic graphs with high-contrast curves for inbound and outbound interface bandwidth.
+
+![Realtime Traffic](screenshots/realtime.png)
+
+### System Settings & Time Synchronization
+
+Timezone configuration, NTP time servers, and system logging properties.
+
+![System Settings](screenshots/system_settings.png)
+
+### Services: AdBlock Fast
+
+Manage network-wide content filtering and blocklist sources without interface lag.
+
+![AdBlock Fast](screenshots/adblock.png)
+
+### System Daemons & Startup Scripts
+
+Service status and init scripts control.
+
+![Startup Services](screenshots/startup.png)
+
+## Key Features
+
+- **Clutter-Free Forms**: Explanatory text is organized cleanly without overwhelming configuration views.
+- **High-Contrast Dark Canvas**: Deep obsidian background with warm amber accents, comfortable on the eyes during late-night administration.
+- **Modern Input Toggles**: Replaces raw checkboxes with clean, animated toggle switches.
+- **Interface Badging**: Distinct color-coded badges for network zones and firewall rules.
+- **Upstream Semantics**: Preserves 100% of LuCI client-side JavaScript, DOM structure, and accessibility hooks.
+- **Responsive**: Adapts cleanly across mobile, tablet, and widescreen desktop monitors.
 
 ## Compatibility
 
