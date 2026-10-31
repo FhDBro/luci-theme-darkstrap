@@ -4,17 +4,17 @@ A modern, high-contrast dark theme for OpenWrt LuCI.
 
 ## Screenshots
 
-### System Overview
-![System Overview](screenshots/overview.png)
+| System Overview | Wireless Interfaces (Blurred SSID) |
+| :---: | :---: |
+| ![Overview](screenshots/overview.png) | ![Wireless](screenshots/wireless.png) |
 
-### Wireless Interfaces
-![Wireless Interfaces](screenshots/wireless.png)
+| Realtime Bandwidth | Firewall Zones |
+| :---: | :---: |
+| ![Realtime Bandwidth](screenshots/realtime.png) | ![Firewall](screenshots/firewall.png) |
 
-### Network & DHCP Configuration
-![Network & DHCP Configuration](screenshots/dhcp_dns.png)
-
-### Firewall Zones
-![Firewall Zones](screenshots/firewall.png)
+| Mobile Responsive View |
+| :---: |
+| <img src="screenshots/mobile.png" width="360" alt="Mobile View" /> |
 
 ## Features
 
