@@ -6,14 +6,14 @@
 
 include $(TOPDIR)/rules.mk
 
-LUCI_TITLE:=FWrt Obsidian Dark Theme
+LUCI_TITLE:=Darkstrap Theme
 LUCI_DEPENDS:=+luci-base
 PKG_LICENSE:=Apache-2.0
 
-define Package/luci-theme-fwrt/postrm
+define Package/luci-theme-darkstrap/postrm
 #!/bin/sh
 [ -n "$${IPKG_INSTROOT}" ] || {
-	uci -q delete luci.themes.FWrt
+	uci -q delete luci.themes.Darkstrap
 	uci commit luci
 }
 endef

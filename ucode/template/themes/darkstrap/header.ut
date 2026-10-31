@@ -39,14 +39,14 @@
 	</head>
 
 	<body class="lang_{{ dispatcher.lang }} {{ entityencode(striptags(node?.title ?? ''), true) }}" data-page="{{ entityencode(join('-', ctx.request_path), true) }}">
-		<div id="fwrt-abstract-bg" aria-hidden="true">
-			<div class="fwrt-abstract-positioner">
-				<div class="fwrt-abstract-spinner">
-					<div class="fwrt-abstract-layer fwrt-layer-0"></div>
-					<div class="fwrt-abstract-layer fwrt-layer-1"></div>
-					<div class="fwrt-abstract-layer fwrt-layer-2"></div>
-					<div class="fwrt-abstract-layer fwrt-layer-3"></div>
-					<div class="fwrt-abstract-layer fwrt-layer-4"></div>
+		<div id="darkstrap-abstract-bg" aria-hidden="true">
+			<div class="darkstrap-abstract-positioner">
+				<div class="darkstrap-abstract-spinner">
+					<div class="darkstrap-abstract-layer darkstrap-layer-0"></div>
+					<div class="darkstrap-abstract-layer darkstrap-layer-1"></div>
+					<div class="darkstrap-abstract-layer darkstrap-layer-2"></div>
+					<div class="darkstrap-abstract-layer darkstrap-layer-3"></div>
+					<div class="darkstrap-abstract-layer darkstrap-layer-4"></div>
 				</div>
 			</div>
 		</div>
@@ -55,7 +55,7 @@
 			try {
 				var cycle = 52;
 				var elapsed = (Date.now() / 1000) % cycle;
-				var spin = document.querySelector('.fwrt-abstract-spinner');
+				var spin = document.querySelector('.darkstrap-abstract-spinner');
 				if (spin) {
 					spin.style.animationDelay = '-' + elapsed.toFixed(3) + 's';
 					spin.style.animationPlayState = 'running';

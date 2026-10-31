@@ -12,10 +12,10 @@ set_opt() {
 	fi
 }
 
-set_opt themes.FWrt /luci-static/fwrt
+set_opt themes.Darkstrap /luci-static/darkstrap
 
 if [ "$PKG_UPGRADE" != 1 ] && [ $changed = 1 ]; then
-	set_opt main.mediaurlbase /luci-static/fwrt
+	set_opt main.mediaurlbase /luci-static/darkstrap
 fi
 
 if [ $changed = 1 ]; then

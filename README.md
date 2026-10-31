@@ -1,70 +1,64 @@
-# luci-theme-fwrt
+# luci-theme-darkstrap
 
-A modern, high-contrast dark theme for OpenWrt LuCI.
+A high-contrast dark theme for OpenWrt LuCI, built on top of the official Bootstrap theme.
 
-## Screenshots
+Designed for readability in low-light environments, with clear visual hierarchy, distinct status badges, and zero external dependencies.
 
-| System Overview | Wireless Interfaces (Blurred SSID) |
-| :---: | :---: |
-| ![Overview](screenshots/overview.png) | ![Wireless](screenshots/wireless.png) |
+## Preview
 
-| Realtime Bandwidth | Firewall Zones |
-| :---: | :---: |
-| ![Realtime Bandwidth](screenshots/realtime.png) | ![Firewall](screenshots/firewall.png) |
+![Walkthrough](screenshots/demo.gif)
 
-| Mobile Responsive View |
-| :---: |
-| <img src="screenshots/mobile.png" width="360" alt="Mobile View" /> |
+## Comparison with Stock LuCI Bootstrap
 
-## Features
+| Page | Stock Bootstrap vs Darkstrap |
+| :--- | :--- |
+| **System Overview** | ![Overview Comparison](screenshots/comparison_overview.png) |
+| **Wireless Interfaces** | ![Wireless Comparison](screenshots/comparison_wireless.png) |
+| **Firewall Zones** | ![Firewall Comparison](screenshots/comparison_firewall.png) |
+| **Realtime Bandwidth** | ![Realtime Comparison](screenshots/comparison_realtime.png) |
 
-- **Dark Mode Interface**: Deep navy-black background with amber accents, optimized for contrast and readability.
-- **Hardware Status Indicators**: Clear color-coded indicators for Ethernet ports, wireless radios, and system load.
-- **Responsive Layout**: Adapts cleanly across mobile, tablet, and desktop viewports.
-- **Interactive Help Disclosures**: Field helper descriptions tucked behind clickable `?` badges to reduce visual clutter.
-- **Smoother Realtime Charts**: Hardware-accelerated SVG bandwidth and WiFi frequency graphs.
+## Key Changes
+
+- Deep obsidian background with warm amber action accents.
+- Preserves 100% of upstream LuCI DOM structure and accessibility semantics.
+- Replaces raw checkboxes in firewall and service views with animated toggle switches.
+- Field help descriptions tucked behind clickable `?` indicators to reduce visual noise.
+- Distinct color-coded badges for network interfaces (green LAN, red WAN, blue bridges).
+- Hardware-accelerated SVG realtime bandwidth curves with legible contrast.
+- Fully responsive across mobile, tablet, and desktop viewports.
 
 ## Compatibility
 
-- OpenWrt 21.02+ (ucode-based LuCI)
-- OpenWrt 23.05
-- OpenWrt 24.10
-- OpenWrt SNAPSHOT
+- OpenWrt 21.02, 22.03, 23.05, 24.10, and SNAPSHOT.
+- Compatible with all LuCI ucode-based releases.
 
 ## Installation
 
-### Via opkg (Once available in official feeds)
-
-```sh
-opkg update
-opkg install luci-theme-fwrt
-```
-
 ### Manual Installation (.ipk)
 
-Download the latest `.ipk` package from [Releases](https://github.com/FhDBro/luci-theme-fwrt/releases), upload it to your router, and install:
+Download the latest `.ipk` package from [Releases](https://github.com/FhDBro/luci-theme-darkstrap/releases), copy it to your router, and install:
 
 ```sh
-opkg install luci-theme-fwrt_*.ipk
+opkg install luci-theme-darkstrap_*.ipk
 ```
 
 ### Building from Source
 
-In your OpenWrt SDK or buildroot:
+In your OpenWrt SDK or buildroot tree:
 
 ```sh
 cd package/feeds/luci/
-git clone https://github.com/FhDBro/luci-theme-fwrt.git
-make menuconfig # LuCI -> Themes -> luci-theme-fwrt
-make package/luci-theme-fwrt/compile
+git clone https://github.com/FhDBro/luci-theme-darkstrap.git
+make menuconfig # LuCI -> Themes -> luci-theme-darkstrap
+make package/luci-theme-darkstrap/compile
 ```
 
-## Configuration
+## Activation via UCI
 
-To set as the active theme via UCI:
+To set Darkstrap as the default active theme:
 
 ```sh
-uci set luci.main.mediaurlbase='/luci-static/fwrt'
+uci set luci.main.mediaurlbase='/luci-static/darkstrap'
 uci commit luci
 /etc/init.d/uhttpd restart
 ```
