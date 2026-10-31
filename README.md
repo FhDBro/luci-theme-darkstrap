@@ -2,6 +2,20 @@
 
 A modern, high-contrast dark theme for OpenWrt LuCI.
 
+## Screenshots
+
+### System Overview
+![System Overview](screenshots/overview.png)
+
+### Wireless Interfaces
+![Wireless Interfaces](screenshots/wireless.png)
+
+### Network & DHCP Configuration
+![Network & DHCP Configuration](screenshots/dhcp_dns.png)
+
+### Firewall Zones
+![Firewall Zones](screenshots/firewall.png)
+
 ## Features
 
 - **Dark Mode Interface**: Deep navy-black background with amber accents, optimized for contrast and readability.
