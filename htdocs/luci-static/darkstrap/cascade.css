@@ -7069,7 +7069,7 @@ th.col-action, td.col-action {
   background: rgba(10, 15, 29, 0.85);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 6px;
-  overflow: hidden;
+  overflow: visible;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
 }
 
@@ -7371,6 +7371,27 @@ img[src*="/icons/"] {
   border-width: 6px;
   border-style: solid;
   border-color: rgba(255, 176, 32, 0.45) transparent transparent transparent;
+}
+
+/* Edge-aware alignment for interface port tooltips so they never clip off viewport */
+.ifacebox:first-child .cbi-tooltip-container .cbi-tooltip {
+  left: 0;
+  transform: translateX(0);
+}
+.ifacebox:first-child .cbi-tooltip-container .cbi-tooltip::after {
+  left: 28px;
+  transform: translateX(-50%);
+}
+
+.ifacebox:last-child .cbi-tooltip-container .cbi-tooltip {
+  left: auto;
+  right: 0;
+  transform: translateX(0);
+}
+.ifacebox:last-child .cbi-tooltip-container .cbi-tooltip::after {
+  left: auto;
+  right: 28px;
+  transform: translateX(50%);
 }
 
 @keyframes darkstrapTooltipFadeIn {
@@ -7965,7 +7986,7 @@ footer.container,
 .cbi-tblsection,
 .cbi-map-tabbed {
   position: relative;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .cbi-section .ifacebadge,
@@ -8648,7 +8669,7 @@ body[data-page*="admin-network-firewall"] .cbi-section {
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 12px;
   background: rgba(12, 17, 28, 0.88);
-  overflow: hidden;
+  overflow: visible;
 }
 
 body[data-page*="admin-status-nftables"] .table,
