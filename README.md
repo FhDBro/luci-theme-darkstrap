@@ -1,8 +1,6 @@
 # luci-theme-darkstrap
 
-A simple, clutter-free, and easy-to-use dark theme for OpenWrt LuCI.
-
-Standard LuCI pages place long paragraphs of text under each form field. Darkstrap hides those descriptions behind `?` buttons so pages stay clean, and switches checkboxes to toggles.
+Darkstrap is a dark theme for OpenWrt LuCI that cleans up crowded settings pages by folding long field descriptions behind clickable `?` buttons and replacing checkboxes with toggles.
 
 ## Quick install
 
