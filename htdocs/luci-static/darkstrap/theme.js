@@ -770,12 +770,9 @@
         tt.classList.remove('darkstrap-tooltip-above');
       }
 
-      // 2. Horizontal positioning & arrow alignment:
-      // The arrow must ALWAYS point directly to the horizontal center of the target element (cRect)
+      // 2. Horizontal positioning & arrow alignment
       var targetCenterX = cRect.left + cRect.width / 2;
       var ttWidth = ttRect.width;
-
-      // Ideal center is targetCenterX
       var desiredTtLeft = targetCenterX - ttWidth / 2;
 
       // Clamp tooltip body within viewport margins
@@ -785,13 +782,8 @@
         desiredTtLeft = winW - pad - ttWidth;
       }
 
-      // Convert from screen coordinates to container-relative coordinate
       var relativeTtLeft = desiredTtLeft - cRect.left;
-
-      // The arrow inside the tooltip must point to targetCenterX
-      var arrowX = targetCenterX - desiredTtLeft;
-      // Clamp arrow inside the tooltip rounded card bounds
-      arrowX = Math.max(14, Math.min(ttWidth - 14, arrowX));
+      var arrowX = Math.max(14, Math.min(ttWidth - 14, targetCenterX - desiredTtLeft));
 
       tt.style.setProperty('--darkstrap-tt-left', relativeTtLeft + 'px');
       tt.style.setProperty('--darkstrap-tt-right', 'auto');

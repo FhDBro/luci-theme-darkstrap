@@ -212,7 +212,7 @@ footer {
 }
 
 
-/* TYPOGRAPHY */
+/* Typography */
 a { color:var(--accent); text-decoration:none; transition:color var(--dur-fast) var(--ease), text-shadow var(--dur-fast); }
 a:hover { color:var(--accent-bright); text-shadow:0 0 12px var(--glow-sm); }
 hr { border:none; border-top:1px solid var(--border-subtle); margin:16px 0; }
@@ -653,7 +653,7 @@ input[type=range]::-moz-range-track {
 }
 
 
-/* NEON MECH SWITCHES (Checkbox replacement) */
+/* Toggle switches */
 input[type=checkbox] {
   appearance: none;
   -webkit-appearance: none;
@@ -751,7 +751,7 @@ input[type=radio]:checked::before {
 
 
 
-/* LED SEGMENTED PROGRESS BARS */
+/* Progress bars */
 .cbi-progressbar,
 .progress,
 .darkstrap-led-bar {
@@ -923,7 +923,7 @@ input[type=submit]:active {
 }
 
 
-/* BIOMETRIC HOLD RING */
+/* Confirmation hold button */
 .darkstrap-hold-btn {
   position: relative;
   user-select: none;
@@ -980,7 +980,7 @@ input[type=submit]:active {
 }
 
 
-/* PLASMA SHOCKWAVE RIPPLE */
+/* Button ripple effect */
 .darkstrap-plasma {
   position: absolute;
   border-radius: 50%;
@@ -1596,7 +1596,7 @@ header .nav .dropdown-menu .active > a {
   text-decoration: none;
 }
 
-/* Human-Designed Segmented Sub-Menu & Tab Navigation (Handcrafted Figma / Linear System) */
+/* Submenu and tab navigation */
 #tabmenu {
   background: transparent;
   border: none;
@@ -3828,7 +3828,7 @@ header .nav .dropdown-menu .divider {
   margin: 5px 2px;
 }
 
-/* Universal LuCI select/dropdown widgets: Darkstrap Obsidian Gold styling across all pages & modals */
+/* Select and dropdown inputs */
 select,
 .cbi-select,
 .cbi-dropdown:not(.btn):not(.cbi-button),
@@ -4848,9 +4848,9 @@ body[data-page="admin-network-wireless"] [data-name="_badge"] > div.center {
 
 
 
-/* ========================================================================== Darkstrap REALTIME GRAPHS & CHANNEL ANALYSIS (TESLA / HA MODERN STYLE) ========================================================================== */
+/* Realtime bandwidth graphs and channel analysis */
 
-/* 1. Kill the hardcoded white background wrapper around all SVGs and stray bars GLOBALLY */
+/* Reset white backgrounds on graph SVGs */
 [style*="background:#fff"], 
 [style*="background: #fff"], 
 [style*="background-color:#fff"],
@@ -4997,7 +4997,7 @@ select.cbi-input-invalid:focus,
   line-height: 1;
 }
 
-/* 3. Text & Grid lines (Ultra minimal) */
+/* Graph axis and grid lines */
 svg line {
   stroke: rgba(255,255,255,0.04);
   stroke-width: 1px;
@@ -5016,13 +5016,13 @@ svg text {
   text-shadow: none;
 }
 
-/* 4. Hide the original angular polylines entirely */
+/* Hide raw polylines */
 svg polyline {
   fill: none;
   /* Opacity is handled by JS dynamically to prevent blank graphs */
 }
 
-/* 5. Channel Analysis Specific: Overlapping wifi arcs */
+/* Channel analysis arcs */
 #modal_overlay svg path[fill-opacity="0.3"],
 .cbi-section svg path[fill-opacity="0.3"] {
   fill-opacity: 0.10;
@@ -5041,7 +5041,7 @@ svg line[stroke="#000000"] {
   stroke-dasharray: 3;
 }
 
-/* 6. The Spline Smoothed Lines (120Hz Fluid Hardware-Accelerated Oscilloscope) */
+/* Smoothed curve lines */
 svg path.darkstrap-premium-line {
   fill: none;
   stroke-width: 3.5px;
@@ -5077,7 +5077,7 @@ svg path.darkstrap-premium-line.load15 {
   filter: none;
 }
 
-/* ========================================================================== /* ========================================================================== Darkstrap NATIVE SVG SPINNER & INDICATOR FIX ========================================================================== */
+/* SVG spinner styling */
 
 /* Instead of hacking the DOM, we use a perfectly native SVG background image */
 .spinning {
@@ -5197,7 +5197,7 @@ footer, .luci-footer {
 }
 /* Darkstrap REALTIME GRAPHS & TAB NAVIGATION POLISH */
 
-/* 1. Subtle, ultra-clean gridlines - no harsh white dashes */
+/* Grid lines */
 .cbi-section svg line {
   stroke: rgba(255, 255, 255, 0.07);
   stroke-width: 1px;
@@ -5209,7 +5209,7 @@ footer, .luci-footer {
   stroke: rgba(255, 255, 255, 0.05);
 }
 
-/* 2. Soft, legible axis text */
+/* Axis labels */
 .cbi-section svg text {
   fill: #8a9cb0;
   font-family: Inter, system-ui, -apple-system, sans-serif;
@@ -5237,7 +5237,7 @@ footer, .luci-footer {
   letter-spacing: 0.03em;
 }
 
-/* 1 Min / Inbound (RX) Neon Cyan */
+/* Inbound (RX) */
 td strong[style*="#f00"], 
 td strong[style*="red"],
 #lb_load01_cur,
@@ -5247,7 +5247,7 @@ td strong[style*="red"],
   text-shadow: 0 0 8px rgba(245, 158, 11, 0.4);
 }
 
-/* 5 Min / Outbound (TX) Neon Pink/Magenta */
+/* Outbound (TX) */
 td strong[style*="#f60"],
 #lb_load05_cur,
 [id*="tx_cur"] {
@@ -5256,7 +5256,7 @@ td strong[style*="#f60"],
   text-shadow: 0 0 8px rgba(255, 51, 102, 0.4);
 }
 
-/* 15 Min Amber Gold */
+/* 15 Min */
 td strong[style*="#fa0"],
 #lb_load15_cur {
   color: var(--darkstrap-accent);
@@ -5264,7 +5264,7 @@ td strong[style*="#fa0"],
   text-shadow: 0 0 8px rgba(255, 176, 32, 0.4);
 }
 
-/* 5. Navigation Tab Glow & Consistency */
+/* Navigation tabs */
 .cbi-tabmenu {
   display: flex;
   gap: 8px;
@@ -5792,7 +5792,7 @@ header .nav > li > a:hover,
   text-shadow: 0 0 10px rgba(255, 176, 32, 0.4);
 }
 
-/* 2. Sub-Menu Dropdown Items - Snappy, Fluid, No Shifting */
+/* Submenu dropdown items */
 .dropdown-menu > li > a,
 .menu-dropdown > li > a,
 ul.dropdown-menu li a {
@@ -5810,7 +5810,7 @@ ul.dropdown-menu li a:hover {
   text-shadow: 0 0 8px rgba(255, 176, 32, 0.4);
 }
 
-/* 3. Process Table Rows & Process Name Subtle Slide */
+/* Process table rows */
 tr.proc-gold-tr {
   transition: transform 0.16s cubic-bezier(0.16, 1, 0.3, 1), background 0.16s ease, box-shadow 0.16s ease;
 }
@@ -5880,7 +5880,7 @@ tr.proc-gold-tr:hover .proc-desc-sub {
   box-shadow: 0 3px 12px rgba(244, 63, 94, 0.55);
 }
 
-/* 6. Refresh Button Subtle Lift */
+/* Refresh button */
 .proc-gold-container .gold-refresh-btn {
   transition: transform 0.18s cubic-bezier(0.16, 1, 0.3, 1), background 0.18s ease, box-shadow 0.18s ease, color 0.18s ease;
 }
@@ -6504,7 +6504,7 @@ th.col-action, td.col-action {
 }
 /* Wireless overview */
 
-/* 1. Radio Hardware Badge & No-Wrap */
+/* Radio badge */
 .darkstrap-radio-badge {
   display: inline-flex;
   align-items: center;
@@ -6524,7 +6524,7 @@ th.col-action, td.col-action {
   flex: 0 0 auto;
 }.radio-name-text { font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; color: #f1f5f9; flex: 0 0 auto; }.radio-band-chip { font-family: 'JetBrains Mono', monospace; font-size: 9.5px; font-weight: 700; color: var(--darkstrap-accent); background: rgba(255, 176, 32, 0.1); border: 1px solid rgba(255, 176, 32, 0.3); padding: 1px 5px; border-radius: 4px; flex: 0 0 auto; }
 
-/* 2. Client Signal Badge with Color-Coded Quality */
+/* Client signal badge */
 .darkstrap-sig-badge {
   display: inline-flex;
   align-items: center;
@@ -6557,7 +6557,7 @@ th.col-action, td.col-action {
 .signal-weak { color: #f59e0b; background: rgba(245, 158, 11, 0.08); border: 1px solid rgba(245, 158, 11, 0.25); }
 .signal-disabled { color: #64748b; background: rgba(255, 255, 255, 0.02); border: 1px dashed rgba(255, 255, 255, 0.08); }
 
-/* 3. Parent Radio Card Hierarchy & Asymmetry */
+/* Radio card layout */
 .darkstrap-wifi-parent-title {
   display: flex;
   align-items: center;
@@ -6574,7 +6574,7 @@ th.col-action, td.col-action {
   color: #94a3b8;
 }.wifi-meta-divider { color: #475569; }.wifi-meta-clients { color: var(--darkstrap-accent); font-weight: 700; }.wifi-meta-disabled { color: #64748b; }
 
-/* 4. Child SSID Card Hierarchy & Visual Tree Link */
+/* SSID card layout */
 .darkstrap-ssid-title-row {
   display: flex;
   align-items: center;
@@ -6607,7 +6607,7 @@ th.col-action, td.col-action {
   color: #64748b;
 }
 
-/* 5. Button Consistency & Danger Color Coding */
+/* Action buttons */
 .cbi-section-actions button {
   font-family: 'JetBrains Mono', monospace;
   font-size: 11px;
@@ -6621,7 +6621,7 @@ th.col-action, td.col-action {
 .cbi-section-actions button.cbi-button-negative:hover { color: #fff; background: rgba(245, 158, 11, 0.20); border-color: #f59e0b; box-shadow: 0 0 12px rgba(244, 63, 94, 0.45); }
 /* Darkstrap 3-HUE MINIMALIST DESIGN SYSTEM (GOLD + EMERALD + CRIMSON) Corner Radius: Strict 6px | Spacing: 4px/8px Grid */
 
-/* 1. Global Base Shapes & Uniform 6px Radius */
+/* Base border radius */
 .cbi-section-table-row,
 .darkstrap-radio-badge,
 .darkstrap-sig-badge,
@@ -6640,7 +6640,7 @@ th.col-action, td.col-action {
   border-radius: 6px;
 }
 
-/* 2. Strict 3-Hue Semantic Status Badges */
+/* Status badges */
 .badge-status-good,
 .signal-good {
   color: #34d399;
@@ -6662,7 +6662,7 @@ th.col-action, td.col-action {
   border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-/* 3. Radio Hardware Badge & No-Wrap */
+/* Radio hardware badge */
 .darkstrap-radio-badge {
   display: inline-flex;
   align-items: center;
@@ -6698,7 +6698,7 @@ th.col-action, td.col-action {
   padding: 1px 6px;
 }
 
-/* 4. Client Signal Indicator */
+/* Signal indicator */
 .darkstrap-sig-badge {
   display: inline-flex;
   align-items: center;
@@ -6718,7 +6718,7 @@ th.col-action, td.col-action {
   flex: 0 0 auto;
 }
 
-/* 5. Border & Glow Hierarchy (Active vs Flat Idle) */
+/* Border highlights */
 .cbi-section-table-row {
   background: rgba(10, 15, 29, 0.6);
   border: 1px solid rgba(255, 255, 255, 0.06);
@@ -6734,7 +6734,7 @@ th.col-action, td.col-action {
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4), 0 0 12px rgba(255, 176, 32, 0.06);
 }
 
-/* 6. Typography & Grid Spacing */
+/* Typography and grid */
 .darkstrap-wifi-parent-title {
   display: flex;
   align-items: center;
@@ -6798,7 +6798,7 @@ th.col-action, td.col-action {
   color: #64748b;
 }
 
-/* 7. Action Button Hierarchy (Gold Accent / Slate Neutral / Rose Danger) */
+/* Button styles */
 .cbi-section-actions button {
   font-family: 'JetBrains Mono', monospace;
   font-size: 11px;
@@ -7041,7 +7041,7 @@ th.col-action, td.col-action {
 }
 /* Darkstrap PHYSICAL ETHERNET SWITCH & INTERFACES DESIGN */
 
-/* 1. Physical Port Switch Visualizer */
+/* Switch port visualizer */
 .darkstrap-switch-deck {
   background: rgba(10, 15, 29, 0.75);
   border: 1px solid rgba(255, 255, 255, 0.08);
@@ -7178,7 +7178,7 @@ th.col-action, td.col-action {
   font-size: 11px;
 }.ifacebox-body img { width: 18px; height: 18px; opacity: 0.85; }
 
-/* 2. Inactive / Absent Interface Card Dimming (e.g. wan_6) */
+/* Inactive interface dimming */
 .cbi-section-table-row.iface-inactive {
   opacity: 0.48;
   filter: grayscale(0.6);
@@ -7199,7 +7199,7 @@ th.col-action, td.col-action {
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
 }
 
-/* 3. 2-Hue Typography & Grid Spacing */
+/* Typography and spacing */
 .darkstrap-ifc-row-title {
   display: flex;
   align-items: center;
@@ -7400,7 +7400,7 @@ img[src*="/icons/"] {
   max-width: 420px;
   padding: 12px 14px;
   
-  /* Obsidian Theme Styling */
+  /* Tooltip card */
   background: #090e1a;
   border: 1px solid rgba(255, 176, 32, 0.5);
   border-radius: 6px;
@@ -7512,7 +7512,7 @@ img[src*="/icons/"] {
   contain: layout paint;
 }
 
-/* 120Hz Silky Progress & Metric Bars */
+/* Metric bars */
 .cbi-progressbar[title] > div,
 .progress[title] > div,
 .cbi-progressbar[title] > .bar,
@@ -7532,7 +7532,7 @@ img[src*="/icons/"] {
 
 /* Darkstrap FIGMA DARK MODE & LIQUID GLASS ELEVATION SYSTEM (HUMAN DESIGNED) */
 
-/* 1. Neutralize all legacy synthetic grids, neon glows & artificial dots */
+/* Canvas background */
 body::before,
 body::after,
 .darkstrap-aurora,
@@ -7551,7 +7551,7 @@ body::after,
   box-shadow: none;
 }
 
-/* 2. Deep Neutral Obsidian Base Canvas */
+/* Background layer */
 html {
   background-color: #080a0f;
   background-image: 
@@ -7698,7 +7698,7 @@ header {
   }
 }
 
-/* 4. Figma-Style Immersive Liquid Glass Cards (Translucent Depth + High Contrast Text) */
+/* Section cards */
 fieldset.cbi-section,
 .cbi-section,
 .cbi-tblsection,
@@ -7802,7 +7802,7 @@ table,
   font-variant-numeric: tabular-nums;
 }
 
-/* 5. Typography Polish — Pure Professional Contrast */
+/* Typography contrast */
 h1, h2, h3, h4,
 .cbi-section-title,
 legend.cbi-section-legend {
@@ -7812,7 +7812,7 @@ legend.cbi-section-legend {
   letter-spacing: -0.015em;
 }
 
-/* 6. Sub-Menu Dropdown Stability — Clean Border, NO Cyan Horizontal Bar */
+/* Submenu dropdowns */
 .dropdown-menu,
 header .nav .dropdown-menu,
 .tabs .dropdown-menu {
@@ -7884,7 +7884,7 @@ header .nav > li:nth-last-child(2) > .dropdown-menu {
   right: 0;
 }
 
-/* Submenu items: clean human design without neon blue text */
+/* Submenu items */
 .dropdown-menu > li > a,
 header .nav .dropdown-menu > li > a,
 .tabs .dropdown-menu a {
@@ -7923,7 +7923,7 @@ header .nav .dropdown-menu .active > a {
   z-index: 2;
 }
 
-/* 8. Completely Remove OpenWrt / LuCI Footer Branding */
+/* Footer adjustments */
 footer,
 #maincontent + footer,
 body > footer,
@@ -7941,7 +7941,7 @@ footer.container,
   pointer-events: none;
 }
 
-/* 9. Human-Designed Segmented Sub-Menu & Tab Navigation (Handcrafted Figma / Linear System) */
+/* Submenu and tab navigation */
 #tabmenu {
   background: transparent !important;
   border: none;
@@ -8109,7 +8109,7 @@ footer.container,
 
 
 
-/* 11.1 Liquid Glass: Applied Strictly to Outer Page Cards and Modals Only (No Nested Blurs) */
+/* Card background */
 #maincontent > .container > .cbi-section,
 #maincontent > .cbi-map > .cbi-section,
 #maincontent > .cbi-section {
