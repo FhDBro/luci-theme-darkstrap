@@ -746,6 +746,9 @@
       var tt = container.querySelector('.cbi-tooltip');
       if (!tt) return;
 
+      var sec = container.closest('.cbi-section, .cbi-tblsection, .ifacebox');
+      if (sec) sec.style.zIndex = '100';
+
       var wasHidden = (window.getComputedStyle(tt).display === 'none');
       if (wasHidden) {
         tt.style.display = 'flex';
@@ -758,10 +761,12 @@
       var winH = window.innerHeight;
 
       // 1. Vertical flip check:
-      if (rect.top < pad) {
-        tt.classList.add('darkstrap-tooltip-below');
-      } else if (rect.bottom > winH - pad && (rect.top - rect.height > pad)) {
+      if (rect.bottom > winH - pad && (rect.top - rect.height > pad)) {
+        tt.classList.add('darkstrap-tooltip-above');
         tt.classList.remove('darkstrap-tooltip-below');
+      } else if (rect.top < pad) {
+        tt.classList.add('darkstrap-tooltip-below');
+        tt.classList.remove('darkstrap-tooltip-above');
       }
 
       rect = tt.getBoundingClientRect();
@@ -790,8 +795,13 @@
     }
 
     function resetTooltip(container) {
+      var sec = container.closest('.cbi-section, .cbi-tblsection, .ifacebox');
+      if (sec) sec.style.removeProperty('z-index');
+
       var tt = container.querySelector('.cbi-tooltip');
       if (tt) {
+        tt.classList.remove('darkstrap-tooltip-above');
+        tt.classList.remove('darkstrap-tooltip-below');
         tt.style.removeProperty('--darkstrap-tt-left');
         tt.style.removeProperty('--darkstrap-tt-right');
         tt.style.removeProperty('--darkstrap-tt-transform');

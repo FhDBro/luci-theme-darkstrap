@@ -7361,6 +7361,18 @@ img[src*="/icons/"] {
   overflow: visible;
 }
 
+/* Stacking context elevation: prevent adjacent section cards from overlapping popped-out tooltips */
+.cbi-section:has(.cbi-tooltip-container:hover),
+.cbi-section:has(.cbi-tooltip-container:focus-within),
+.cbi-tblsection:has(.cbi-tooltip-container:hover),
+.cbi-tblsection:has(.cbi-tooltip-container:focus-within),
+.ifacebox:hover,
+.ifacebox:focus-within,
+.cbi-tooltip-container:hover,
+.cbi-tooltip-container:focus-within {
+  z-index: 100 !important;
+}
+
 /* Tooltips */
 .cbi-tooltip-container {
   position: relative;
@@ -7421,6 +7433,20 @@ img[src*="/icons/"] {
 .cbi-tooltip.darkstrap-tooltip-below {
   top: calc(100% + 8px);
   bottom: auto;
+}
+
+/* Tooltip Flip Top: when near bottom of viewport */
+.cbi-tooltip.darkstrap-tooltip-above,
+.ifacebox-body .cbi-tooltip-container .cbi-tooltip.darkstrap-tooltip-above {
+  top: auto !important;
+  bottom: calc(100% + 8px) !important;
+}
+
+.cbi-tooltip.darkstrap-tooltip-above::after,
+.ifacebox-body .cbi-tooltip-container .cbi-tooltip.darkstrap-tooltip-above::after {
+  top: 100% !important;
+  bottom: auto !important;
+  border-color: rgba(255, 176, 32, 0.45) transparent transparent transparent !important;
 }
 
 /* Tooltip Inner Elements */
