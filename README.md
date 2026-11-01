@@ -1,6 +1,9 @@
 <p align="center">
   <a href="https://github.com/FhDBro/luci-theme-darkstrap">
-    <img src="assets/logo.png" alt="Darkstrap Logo" width="160" height="160">
+    <picture>
+      <source media="(prefers-color-scheme: dark)" srcset="assets/logo-dark.svg">
+      <img src="assets/logo-light.svg" alt="darkstrap" width="130">
+    </picture>
   </a>
 </p>
 
