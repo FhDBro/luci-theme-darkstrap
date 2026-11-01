@@ -1,12 +1,13 @@
 <p align="center">
   <a href="https://github.com/FhDBro/luci-theme-darkstrap">
-    <img src="assets/banner.png" alt="Darkstrap Banner" width="800">
+    <img src="assets/logo.png" alt="Darkstrap Logo" width="120" height="120">
   </a>
 </p>
 
+<h1 align="center">darkstrap</h1>
+
 <p align="center">
-  <strong>Obsidian & amber dark theme for OpenWrt LuCI.</strong><br>
-  Built for high legibility, clean status cards, and clutter-free settings.
+  <strong>A clutter-free theme for OpenWrt LuCI.</strong>
 </p>
 
 <p align="center">
