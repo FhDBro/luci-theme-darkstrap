@@ -2764,9 +2764,9 @@ body.darkstrap-modal-open #modal_overlay {
   overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
   z-index: 40000;
-  background: rgba(4, 7, 13, 0.85);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
+  background: rgba(6, 10, 18, 0.45);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
   padding: 24px 16px;
   box-sizing: border-box;
 }
@@ -2783,7 +2783,7 @@ body.modal-overlay-active #modal_overlay {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: center;
   visibility: visible;
   opacity: 1;
   pointer-events: auto;
@@ -2795,31 +2795,47 @@ body.modal-overlay-active #modal_overlay {
 .modal.cbi-modal,
 .uci-dialog {
   position: relative;
-  max-width: min(880px, 95vw);
-  width: 100%;
-  min-height: min(380px, 75vh);
-  max-height: calc(100vh - 48px);
+  max-width: min(520px, 92vw);
+  width: auto;
+  min-width: min(320px, 90vw);
+  min-height: auto;
+  max-height: calc(100vh - 64px);
   display: flex;
   flex-direction: column;
   margin: auto;
   flex-shrink: 0;
   overflow: hidden;
-  background: linear-gradient(180deg, rgba(14, 20, 32, 0.985), rgba(7, 11, 18, 0.99));
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  border-radius: 14px;
+  background: rgba(13, 18, 30, 0.96);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
   box-shadow:
-    0 24px 80px rgba(0, 0, 0, 0.85),
-    inset 0 1px 0 rgba(255, 255, 255, 0.12);
-  padding: 0;
+    0 20px 60px rgba(0, 0, 0, 0.70),
+    0 2px 8px rgba(0, 0, 0, 0.40),
+    inset 0 1px 0 rgba(255, 255, 255, 0.10);
+  padding: 20px 24px;
   color: #eef5ff;
   z-index: 41000;
+  box-sizing: border-box;
 }
 
-#modal_overlay > .modal > h4,
-#modal_overlay > .modal > h2,
+/* Expanded dimensions for complex configuration forms and tabs */
+#modal_overlay > .modal:has(.cbi-map),
+#modal_overlay > .modal:has(.cbi-section),
+#modal_overlay > .modal:has(.cbi-tabmenu),
+#modal_overlay > .modal.cbi-modal,
+#modal_overlay .uci-dialog {
+  max-width: min(860px, 95vw);
+  width: 100%;
+  padding: 0;
+}
+
+#modal_overlay > .modal:has(.cbi-map) > h4,
+#modal_overlay > .modal:has(.cbi-map) > h2,
+#modal_overlay > .modal.cbi-modal > h4,
+#modal_overlay > .modal.cbi-modal > h2,
 #modal_overlay .modal-header {
   flex: 0 0 auto;
-  padding: 18px 24px;
+  padding: 16px 24px;
   margin: 0;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   font-size: 16px;
@@ -2827,16 +2843,69 @@ body.modal-overlay-active #modal_overlay {
   color: #ffffff;
 }
 
-#modal_overlay > .modal > .cbi-map,
-#modal_overlay > .modal > div:not(.button-row):not(.modal-header):not(.modal-footer):not(h4):not(h2) {
+#modal_overlay > .modal:has(.cbi-map) > .cbi-map,
+#modal_overlay > .modal.cbi-modal > .cbi-map,
+#modal_overlay > .modal:has(.cbi-map) > div:not(.button-row):not(.modal-header):not(.modal-footer):not(h4):not(h2) {
   flex: 1 1 auto;
-  min-height: 200px;
-  height: auto;
+  min-height: auto;
+  max-height: calc(100vh - 180px);
   overflow-y: auto;
   overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
   padding: 20px 24px;
   box-sizing: border-box;
+}
+
+/* Simple alert dialogs, session expiry, and notifications */
+#modal_overlay > .modal:not(:has(.cbi-map)):not(.cbi-modal) > div {
+  flex: 0 0 auto;
+  min-height: auto;
+  height: auto;
+  padding: 0;
+  overflow: visible;
+}
+
+#modal_overlay > .modal:not(:has(.cbi-map)) > h4,
+#modal_overlay > .modal:not(:has(.cbi-map)) > h2 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #f8fafc;
+  margin: 0 0 12px 0;
+  border-bottom: none;
+  padding: 0;
+}
+
+#modal_overlay > .modal:not(:has(.cbi-map)) .alert-message.warning {
+  margin: 0 0 16px 0;
+  padding: 12px 14px;
+  background: rgba(255, 176, 32, 0.08);
+  border: 1px solid rgba(255, 176, 32, 0.25);
+  border-radius: 8px;
+  color: #fde68a;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+#modal_overlay > .modal:not(:has(.cbi-map)) .right {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 14px;
+}
+
+/* Applying configuration status spinner */
+#modal_overlay > .modal.alert-message {
+  min-width: min(320px, 90vw);
+  max-width: min(440px, 90vw);
+  padding: 22px 28px;
+  text-align: center;
+  align-items: center;
+}
+
+#modal_overlay > .modal.alert-message p {
+  margin: 0;
+  font-size: 14px;
+  color: #f8fafc;
+  line-height: 1.5;
 }
 
 #modal_overlay .modal h2,
