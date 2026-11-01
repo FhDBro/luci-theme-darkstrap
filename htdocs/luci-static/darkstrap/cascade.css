@@ -4314,7 +4314,7 @@ body[data-page^="admin-network-interface"] .actions > form > .cbi-button {
   margin: 0;
   scroll-snap-align: start;
   text-align: left;
-  overflow: hidden;
+  overflow: visible;
   border: 1px solid rgba(98,240,255,.20);
   border-radius: 12px;
   background:
@@ -7618,7 +7618,7 @@ fieldset.cbi-section,
     inset 0 1px 0 rgba(255, 255, 255, 0.14);
   transition: border-color linear 0.2s, box-shadow linear 0.2s;
   position: relative;
-  overflow: hidden;
+  overflow: visible;
 }
 
 fieldset.cbi-section:hover,
