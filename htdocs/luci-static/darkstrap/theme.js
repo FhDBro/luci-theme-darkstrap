@@ -755,38 +755,50 @@
         tt.style.visibility = 'hidden';
       }
 
-      var rect = tt.getBoundingClientRect();
-      var pad = 8;
+      var cRect = container.getBoundingClientRect();
+      var ttRect = tt.getBoundingClientRect();
       var winW = window.innerWidth;
       var winH = window.innerHeight;
+      var pad = 12;
 
       // 1. Vertical flip check:
-      if (rect.bottom > winH - pad && (rect.top - rect.height > pad)) {
+      if (ttRect.bottom > winH - pad && (cRect.top - ttRect.height > pad)) {
         tt.classList.add('darkstrap-tooltip-above');
         tt.classList.remove('darkstrap-tooltip-below');
-      } else if (rect.top < pad) {
+      } else if (cRect.top - ttRect.height < pad && (winH - cRect.bottom > ttRect.height + pad)) {
         tt.classList.add('darkstrap-tooltip-below');
         tt.classList.remove('darkstrap-tooltip-above');
       }
 
-      rect = tt.getBoundingClientRect();
+      // 2. Horizontal positioning & arrow alignment:
+      // The arrow must ALWAYS point directly to the horizontal center of the target element (cRect)
+      var targetCenterX = cRect.left + cRect.width / 2;
+      var ttWidth = ttRect.width;
 
-      // 2. Horizontal boundary clamp:
-      if (rect.left < pad) {
-        var shiftX = pad - rect.left;
-        tt.style.setProperty('--darkstrap-tt-left', '0px');
-        tt.style.setProperty('--darkstrap-tt-right', 'auto');
-        tt.style.setProperty('--darkstrap-tt-transform', 'none');
-        tt.style.setProperty('--darkstrap-arrow-left', Math.max(14, 24 - shiftX) + 'px');
-        tt.style.setProperty('--darkstrap-arrow-tx', '0');
-      } else if (rect.right > winW - pad) {
-        tt.style.setProperty('--darkstrap-tt-left', 'auto');
-        tt.style.setProperty('--darkstrap-tt-right', '0px');
-        tt.style.setProperty('--darkstrap-tt-transform', 'none');
-        tt.style.setProperty('--darkstrap-arrow-left', 'auto');
-        tt.style.setProperty('--darkstrap-arrow-right', '24px');
-        tt.style.setProperty('--darkstrap-arrow-tx', '0');
+      // Ideal center is targetCenterX
+      var desiredTtLeft = targetCenterX - ttWidth / 2;
+
+      // Clamp tooltip body within viewport margins
+      if (desiredTtLeft < pad) {
+        desiredTtLeft = pad;
+      } else if (desiredTtLeft + ttWidth > winW - pad) {
+        desiredTtLeft = winW - pad - ttWidth;
       }
+
+      // Convert from screen coordinates to container-relative coordinate
+      var relativeTtLeft = desiredTtLeft - cRect.left;
+
+      // The arrow inside the tooltip must point to targetCenterX
+      var arrowX = targetCenterX - desiredTtLeft;
+      // Clamp arrow inside the tooltip rounded card bounds
+      arrowX = Math.max(14, Math.min(ttWidth - 14, arrowX));
+
+      tt.style.setProperty('--darkstrap-tt-left', relativeTtLeft + 'px');
+      tt.style.setProperty('--darkstrap-tt-right', 'auto');
+      tt.style.setProperty('--darkstrap-tt-transform', 'none');
+      tt.style.setProperty('--darkstrap-arrow-left', arrowX + 'px');
+      tt.style.setProperty('--darkstrap-arrow-right', 'auto');
+      tt.style.setProperty('--darkstrap-arrow-tx', '-50%');
 
       if (wasHidden) {
         tt.style.display = '';
