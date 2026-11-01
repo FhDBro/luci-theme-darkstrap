@@ -1,6 +1,31 @@
-# luci-theme-darkstrap
+<p align="center">
+  <a href="https://github.com/FhDBro/luci-theme-darkstrap">
+    <img src="assets/banner.png" alt="Darkstrap Banner" width="800">
+  </a>
+</p>
 
-Darkstrap is a dark theme for OpenWrt LuCI that cleans up crowded settings pages by folding long field descriptions behind clickable `?` buttons and replacing checkboxes with toggles.
+<p align="center">
+  <strong>Obsidian & amber dark theme for OpenWrt LuCI.</strong><br>
+  Built for high legibility, clean status cards, and clutter-free settings.
+</p>
+
+<p align="center">
+  <a href="#compatibility"><img src="https://img.shields.io/badge/OpenWrt-21.02_--_25.12.x-0284c7.svg?style=flat-square" alt="OpenWrt compatibility"></a>
+  <a href="https://github.com/FhDBro/luci-theme-darkstrap/releases"><img src="https://img.shields.io/github/v/release/FhDBro/luci-theme-darkstrap?color=f59e0b&label=release&style=flat-square" alt="Latest Release"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-Apache--2.0-blue.svg?style=flat-square" alt="License"></a>
+  <img src="https://img.shields.io/badge/PRs-welcome-emerald.svg?style=flat-square" alt="PRs welcome">
+</p>
+
+<p align="center">
+  <a href="#quick-install">Quick install</a> &bull;
+  <a href="#features">Features</a> &bull;
+  <a href="#comparisons">Comparisons</a> &bull;
+  <a href="#screenshots">Screenshots</a> &bull;
+  <a href="#compatibility">Compatibility</a> &bull;
+  <a href="#build-from-source">Build from source</a>
+</p>
+
+---
 
 ## Quick install
 
@@ -20,55 +45,66 @@ apk add luci-theme-darkstrap
 opkg install luci-theme-darkstrap
 ```
 
+---
+
+## Features
+
+- **Field Help Disclosures**: Long parameter explanations fold behind inline vector `?` buttons so dense configuration pages stay readable. Validation errors and critical alerts always stay visible.
+- **Card-Aware Tooltip Boundary Clamping**: Port status and interface badges dynamically calculate viewport and parent card edges to stay fully visible on mobile, windowed, and desktop screens.
+- **Interactive Form Elements**: Checkboxes render as smooth hardware-accelerated toggle switches with explicit focus rings and tactile state indicators.
+- **Glassmorphism Modals**: Session expiry and configuration apply dialogs use translucent backgrounds with subtle blurs, keeping router status visible underneath.
+- **Consistent Contrast & Typography**: Form fields, tabular data, and badges use high-contrast text tokens tested for extended monitoring sessions.
+
+---
+
 ## Comparisons
 
 ### Network: DNS (Default vs Darkstrap)
 
 ![DNS Comparison](screenshots/comparison_dns.png)
 
-Clicking the `?` icon reveals the field help text:
+Clicking the `?` icon discloses parameter documentation without shifting the form layout:
 
 ![DNS Help Revealed](screenshots/dns_disclosed.png)
+
+---
 
 ## Screenshots
 
 ### Status: Overview
-
 ![Overview](screenshots/overview.png)
 
 ### Network: Wireless
-
 ![Wireless](screenshots/wireless.png)
 
 ### Network: Firewall
-
 ![Firewall](screenshots/firewall.png)
 
 ### Status: Realtime Bandwidth
-
 ![Realtime Traffic](screenshots/realtime.png)
 
-### System: System
-
+### System: System Settings
 ![System Settings](screenshots/system_settings.png)
 
 ### Services: AdBlock Fast
-
 ![AdBlock Fast](screenshots/adblock.png)
 
-### System: Startup
-
+### System: Startup Services
 ![Startup Services](screenshots/startup.png)
+
+---
 
 ## Compatibility
 
-- OpenWrt 25.12.x (SNAPSHOT)
-- OpenWrt 24.10
-- OpenWrt 23.05
-- OpenWrt 22.03
-- OpenWrt 21.02
+- **OpenWrt 25.12.x** (SNAPSHOT)
+- **OpenWrt 24.10**
+- **OpenWrt 23.05**
+- **OpenWrt 22.03**
+- **OpenWrt 21.02**
 
-Works with both `apk` and `opkg` systems on any ucode-based LuCI installation.
+Compatible with both `apk` and `opkg` package managers across standard ucode-based LuCI installations.
+
+---
 
 ## Build from source
 
@@ -79,6 +115,8 @@ make menuconfig # LuCI -> Themes -> luci-theme-darkstrap
 make package/luci-theme-darkstrap/compile
 ```
 
+---
+
 ## License
 
-Apache-2.0
+[Apache-2.0](LICENSE) &copy; Tawhidul Islam
