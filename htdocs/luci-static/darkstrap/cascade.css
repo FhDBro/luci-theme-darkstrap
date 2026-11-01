@@ -7301,8 +7301,9 @@ img[src*="/icons/"] {
   display: none;
   position: absolute;
   bottom: calc(100% + 10px);
-  left: 50%;
-  transform: translateX(-50%);
+  left: var(--darkstrap-tt-left, 50%);
+  right: var(--darkstrap-tt-right, auto);
+  transform: var(--darkstrap-tt-transform, translateX(-50%));
   z-index: 999999;
   
   /* Dimensions & Spacing */
@@ -7339,6 +7340,13 @@ img[src*="/icons/"] {
   animation: darkstrapTooltipFadeIn 0.15s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
+/* Tooltip Flip Bottom: detailed port statistics and top-clearance overrides */
+.ifacebox-body .cbi-tooltip-container .cbi-tooltip,
+.cbi-tooltip.darkstrap-tooltip-below {
+  top: calc(100% + 8px);
+  bottom: auto;
+}
+
 /* Tooltip Inner Elements */
 .cbi-tooltip.ifacebadge img {
   width: 24px;
@@ -7361,47 +7369,51 @@ img[src*="/icons/"] {
   font-weight: 700;
 }
 
-/* Downward Pointer Arrow */
+/* Downward Pointer Arrow (default for tooltips opening upwards) */
 .cbi-tooltip::after {
   content: '';
   position: absolute;
   top: 100%;
-  left: 50%;
-  transform: translateX(-50%);
+  left: var(--darkstrap-arrow-left, 50%);
+  right: var(--darkstrap-arrow-right, auto);
+  transform: translateX(var(--darkstrap-arrow-tx, -50%));
   border-width: 6px;
   border-style: solid;
   border-color: rgba(255, 176, 32, 0.45) transparent transparent transparent;
 }
 
-/* Edge-aware alignment for interface port tooltips so they never clip off viewport */
-.ifacebox:first-child .cbi-tooltip-container .cbi-tooltip {
-  left: 0;
-  transform: translateX(0);
+/* Upward Pointer Arrow (for tooltips opening downwards) */
+.ifacebox-body .cbi-tooltip-container .cbi-tooltip::after,
+.cbi-tooltip.darkstrap-tooltip-below::after {
+  top: auto;
+  bottom: 100%;
+  border-color: transparent transparent rgba(255, 176, 32, 0.45) transparent;
 }
-.ifacebox:first-child .cbi-tooltip-container .cbi-tooltip::after {
-  left: 28px;
-  transform: translateX(-50%);
+
+/* Edge-aware alignment for interface port tooltips */
+.ifacebox:first-child .cbi-tooltip-container .cbi-tooltip,
+.ifacebox:nth-child(1) .cbi-tooltip-container .cbi-tooltip {
+  --darkstrap-tt-left: 0;
+  --darkstrap-tt-transform: none;
+  --darkstrap-arrow-left: 28px;
+  --darkstrap-arrow-tx: -50%;
 }
 
 .ifacebox:last-child .cbi-tooltip-container .cbi-tooltip {
-  left: auto;
-  right: 0;
-  transform: translateX(0);
-}
-.ifacebox:last-child .cbi-tooltip-container .cbi-tooltip::after {
-  left: auto;
-  right: 28px;
-  transform: translateX(50%);
+  --darkstrap-tt-left: auto;
+  --darkstrap-tt-right: 0;
+  --darkstrap-tt-transform: none;
+  --darkstrap-arrow-left: auto;
+  --darkstrap-arrow-right: 28px;
+  --darkstrap-arrow-tx: 50%;
 }
 
 @keyframes darkstrapTooltipFadeIn {
   from {
     opacity: 0;
-    transform: translate(-50%, 6px);
   }
   to {
     opacity: 1;
-    transform: translate(-50%, 0);
   }
 }
 

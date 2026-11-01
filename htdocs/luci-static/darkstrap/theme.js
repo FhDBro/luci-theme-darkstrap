@@ -741,11 +741,90 @@
     }, true);
   }
 
+  function initTooltipViewportGuards() {
+    function adjustTooltip(container) {
+      var tt = container.querySelector('.cbi-tooltip');
+      if (!tt) return;
+
+      var wasHidden = (window.getComputedStyle(tt).display === 'none');
+      if (wasHidden) {
+        tt.style.display = 'flex';
+        tt.style.visibility = 'hidden';
+      }
+
+      var rect = tt.getBoundingClientRect();
+      var pad = 8;
+      var winW = window.innerWidth;
+      var winH = window.innerHeight;
+
+      // 1. Vertical flip check:
+      if (rect.top < pad) {
+        tt.classList.add('darkstrap-tooltip-below');
+      } else if (rect.bottom > winH - pad && (rect.top - rect.height > pad)) {
+        tt.classList.remove('darkstrap-tooltip-below');
+      }
+
+      rect = tt.getBoundingClientRect();
+
+      // 2. Horizontal boundary clamp:
+      if (rect.left < pad) {
+        var shiftX = pad - rect.left;
+        tt.style.setProperty('--darkstrap-tt-left', '0px');
+        tt.style.setProperty('--darkstrap-tt-right', 'auto');
+        tt.style.setProperty('--darkstrap-tt-transform', 'none');
+        tt.style.setProperty('--darkstrap-arrow-left', Math.max(14, 24 - shiftX) + 'px');
+        tt.style.setProperty('--darkstrap-arrow-tx', '0');
+      } else if (rect.right > winW - pad) {
+        tt.style.setProperty('--darkstrap-tt-left', 'auto');
+        tt.style.setProperty('--darkstrap-tt-right', '0px');
+        tt.style.setProperty('--darkstrap-tt-transform', 'none');
+        tt.style.setProperty('--darkstrap-arrow-left', 'auto');
+        tt.style.setProperty('--darkstrap-arrow-right', '24px');
+        tt.style.setProperty('--darkstrap-arrow-tx', '0');
+      }
+
+      if (wasHidden) {
+        tt.style.display = '';
+        tt.style.visibility = '';
+      }
+    }
+
+    function resetTooltip(container) {
+      var tt = container.querySelector('.cbi-tooltip');
+      if (tt) {
+        tt.style.removeProperty('--darkstrap-tt-left');
+        tt.style.removeProperty('--darkstrap-tt-right');
+        tt.style.removeProperty('--darkstrap-tt-transform');
+        tt.style.removeProperty('--darkstrap-arrow-left');
+        tt.style.removeProperty('--darkstrap-arrow-right');
+        tt.style.removeProperty('--darkstrap-arrow-tx');
+      }
+    }
+
+    document.addEventListener('mouseover', function (ev) {
+      var container = ev.target && ev.target.closest && ev.target.closest('.cbi-tooltip-container');
+      if (container) adjustTooltip(container);
+    }, { passive: true });
+
+    document.addEventListener('focusin', function (ev) {
+      var container = ev.target && ev.target.closest && ev.target.closest('.cbi-tooltip-container');
+      if (container) adjustTooltip(container);
+    }, { passive: true });
+
+    document.addEventListener('mouseout', function (ev) {
+      var container = ev.target && ev.target.closest && ev.target.closest('.cbi-tooltip-container');
+      if (container && (!ev.relatedTarget || !container.contains(ev.relatedTarget))) {
+        resetTooltip(container);
+      }
+    }, { passive: true });
+  }
+
   ready(function () {
     syncBgAnimation();
     initFastNav();
     initAbstractBackground();
     initMobileNav();
+    initTooltipViewportGuards();
     run(document);
     document.addEventListener('click', function (ev) {
       if (!ev.target.closest('.darkstrap-help-btn, .darkstrap-help-managed')) {
