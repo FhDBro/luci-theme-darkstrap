@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://github.com/FhDBro/luci-theme-darkstrap">
-    <img src="assets/logo.png" alt="Darkstrap Logo" width="120" height="120">
+    <img src="assets/logo.png" alt="Darkstrap Logo" width="160" height="160">
   </a>
 </p>
 
