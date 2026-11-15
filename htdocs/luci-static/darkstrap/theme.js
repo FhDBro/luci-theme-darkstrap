@@ -485,6 +485,7 @@
     collapseEmptyNetworkBlocks(root);
     setModalScrollLock(modalIsOpen());
     wrapAssocTable(root);
+    initMobileNav();
     upgradeGraphs(root);
     injectGraphGradients();
   }
@@ -629,7 +630,7 @@
       }
     });
 
-    header.insertBefore(toggle, header.firstChild);
+    header.appendChild(toggle);
   }
 
   function initAbstractBackground() {
