@@ -27,6 +27,11 @@
 		<link rel="stylesheet" media="only screen and (max-width: 854px)" href="{{ media }}/mobile.css">
 		
 		<link rel="icon" href="{{ media }}/logo.svg" sizes="any" type="image/svg+xml">
+		<link rel="icon" type="image/png" sizes="32x32" href="{{ media }}/logo-32.png">
+		<link rel="icon" type="image/png" sizes="192x192" href="{{ media }}/logo-192.png">
+		<link rel="apple-touch-icon" sizes="180x180" href="{{ media }}/apple-touch-icon.png">
+		<link rel="manifest" href="{{ media }}/manifest.json">
+		<meta name="theme-color" content="#070c14">
 		{% if (node?.css): %}
 		<link rel="stylesheet" href="{{ resource }}/{{ node.css }}">
 		{% endif %}
