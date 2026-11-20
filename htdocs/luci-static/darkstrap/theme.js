@@ -3,6 +3,10 @@
   if (window.__darkstrapThemeJs) return;
   window.__darkstrapThemeJs = true;
 
+  function tr(s) {
+    return (typeof window._ === 'function') ? window._(s) : s;
+  }
+
   function qsa(sel, root) {
     root = root || document;
     var nodes = [];
@@ -104,7 +108,7 @@
       var btn = document.createElement('button');
       btn.type = 'button';
       btn.className = 'darkstrap-help-btn';
-      btn.setAttribute('aria-label', 'Show help');
+      btn.setAttribute('aria-label', tr('Show help'));
       btn.setAttribute('aria-expanded', 'false');
       btn.setAttribute('aria-controls', desc.id);
       btn.setAttribute('data-darkstrap-help-for', desc.id);
@@ -128,7 +132,7 @@
         var isOpen = desc.classList.toggle('darkstrap-help-open');
         btn.classList.toggle('darkstrap-help-active', isOpen);
         btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-        btn.setAttribute('aria-label', isOpen ? 'Hide help' : 'Show help');
+        btn.setAttribute('aria-label', tr(isOpen ? 'Hide help' : 'Show help'));
       });
 
       titleEl.appendChild(btn);
@@ -592,7 +596,7 @@
     toggle.id = 'darkstrap-mobile-toggle';
     toggle.type = 'button';
     toggle.className = 'darkstrap-mobile-toggle-btn';
-    toggle.setAttribute('aria-label', 'Toggle Navigation Menu');
+    toggle.setAttribute('aria-label', tr('Toggle Navigation Menu'));
 
     for (var b = 0; b < 3; b++) {
       var bar = document.createElement('span');
@@ -710,8 +714,8 @@
       if (!target) return;
       var dismissBtn = target.closest('#modal_overlay .button-row button, #modal_overlay .right button, #modal_overlay button[class*="dismiss"], #modal_overlay [data-dismiss="modal"]');
       if (dismissBtn) {
-        var text = (dismissBtn.textContent || dismissBtn.value || '').trim().toLowerCase();
-        if (text === 'dismiss' || text === 'cancel' || text === 'close') {
+        var isAction = dismissBtn.matches('.cbi-button-positive, .cbi-button-action, .cbi-button-save, [type="submit"]');
+        if (!isAction) {
           setTimeout(function () {
             if (window.L && window.L.hideModal) {
               window.L.hideModal();
@@ -855,7 +859,7 @@
         if (b) {
           b.classList.remove('darkstrap-help-active');
           b.setAttribute('aria-expanded', 'false');
-          b.setAttribute('aria-label', 'Show help');
+          b.setAttribute('aria-label', tr('Show help'));
         }
       });
     });
