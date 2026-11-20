@@ -52,7 +52,7 @@
     return desc.closest('.cbi-value') || desc.closest('.tr') || desc.closest('tr') || desc.closest('.cbi-section') || desc.parentElement;
   }
 
-  function findTitleElement(container, desc) {
+  function findTitleElement(container) {
     if (container.classList.contains('cbi-section') || container.classList.contains('cbi-tblsection')) {
       var header = container.querySelector('legend, h3, h2, h1, .cbi-title');
       if (header) return header;
@@ -97,7 +97,7 @@
       if (!desc.id) desc.id = 'darkstrap-help-' + Math.random().toString(36).slice(2, 10);
       if (root.querySelector('.darkstrap-help-btn[data-darkstrap-help-for="' + desc.id + '"]')) return;
 
-      var titleEl = findTitleElement(container, desc);
+      var titleEl = findTitleElement(container);
       if (!titleEl) return;
 
       // Avoid duplicate buttons on re-renders
