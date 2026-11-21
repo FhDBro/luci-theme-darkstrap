@@ -363,7 +363,34 @@
     flex-direction: column !important;
     border-radius: 14px !important;
     margin: 0 !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    -webkit-overflow-scrolling: touch !important;
+    overscroll-behavior: contain !important;
+    padding: 0 !important;
+  }
+
+  #modal_overlay .modal:has(.cbi-map),
+  #modal_overlay .modal:has(.cbi-section),
+  #modal_overlay .modal.cbi-modal {
     overflow: hidden !important;
+  }
+
+  #modal_overlay .modal > h4,
+  #modal_overlay .modal > h2 {
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 20 !important;
+    background: rgba(13, 18, 30, 0.98) !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+    margin: 0 !important;
+    padding: 16px 18px !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+    font-size: 15.5px !important;
+    font-weight: 600 !important;
+    color: #ffffff !important;
+    flex-shrink: 0 !important;
   }
 
   #modal_overlay .modal > form,
@@ -373,6 +400,14 @@
     flex: 1 1 auto !important;
     max-height: calc(90vh - 120px) !important;
     padding: 12px 14px 24px !important;
+  }
+
+  /* Generic modal content (package details, alerts, file info) padding */
+  #modal_overlay .modal > ul,
+  #modal_overlay .modal > p,
+  #modal_overlay .modal > div:not(.right):not(.button-row):not(.modal-header):not(.modal-footer):not(.cbi-page-actions):not(.cbi-map):not(form) {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
   }
 
   /* Modal tabs horizontal scroll */
@@ -391,13 +426,19 @@
   #modal_overlay .modal > .right,
   #modal_overlay .modal > .button-row,
   #modal_overlay .cbi-page-actions {
+    position: sticky !important;
+    bottom: 0 !important;
+    z-index: 20 !important;
     margin-top: auto !important;
     padding: 12px 16px !important;
-    background: rgba(7, 11, 19, 0.95) !important;
+    background: rgba(13, 18, 30, 0.98) !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
     border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
     display: flex !important;
     justify-content: flex-end !important;
     gap: 8px !important;
+    flex-shrink: 0 !important;
   }
 
   /* 8. Touch Hit Targets & Input Comfort */

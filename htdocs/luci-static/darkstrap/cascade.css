@@ -2827,16 +2827,20 @@ body.modal-overlay-active #modal_overlay {
 .modal.cbi-modal,
 .uci-dialog {
   position: relative;
-  max-width: min(520px, 92vw);
+  max-width: min(580px, 92vw);
   width: auto;
   min-width: min(320px, 90vw);
   min-height: auto;
   max-height: calc(100vh - 64px);
+  max-height: calc(100dvh - 64px);
   display: flex;
   flex-direction: column;
   margin: auto;
   flex-shrink: 0;
-  overflow: hidden;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
   background: rgba(13, 18, 30, 0.96);
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 12px;
@@ -2844,10 +2848,24 @@ body.modal-overlay-active #modal_overlay {
     0 20px 60px rgba(0, 0, 0, 0.70),
     0 2px 8px rgba(0, 0, 0, 0.40),
     inset 0 1px 0 rgba(255, 255, 255, 0.10);
-  padding: 20px 24px;
+  padding: 0;
   color: #eef5ff;
   z-index: 41000;
   box-sizing: border-box;
+}
+
+#modal_overlay .modal::-webkit-scrollbar {
+  width: 6px;
+}
+#modal_overlay .modal::-webkit-scrollbar-track {
+  background: transparent;
+}
+#modal_overlay .modal::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
+}
+#modal_overlay .modal::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.35);
 }
 
 /* Expanded dimensions for complex configuration forms and tabs */
@@ -2859,20 +2877,25 @@ body.modal-overlay-active #modal_overlay {
   max-width: min(860px, 95vw);
   width: 100%;
   padding: 0;
+  overflow: hidden;
 }
 
-#modal_overlay > .modal:has(.cbi-map) > h4,
-#modal_overlay > .modal:has(.cbi-map) > h2,
-#modal_overlay > .modal.cbi-modal > h4,
-#modal_overlay > .modal.cbi-modal > h2,
+#modal_overlay > .modal > h4,
+#modal_overlay > .modal > h2,
 #modal_overlay .modal-header {
-  flex: 0 0 auto;
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: rgba(13, 18, 30, 0.98);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   padding: 16px 24px;
   margin: 0;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   font-size: 16px;
   font-weight: 600;
   color: #ffffff;
+  flex-shrink: 0;
 }
 
 #modal_overlay > .modal:has(.cbi-map) > .cbi-map,
@@ -2888,13 +2911,32 @@ body.modal-overlay-active #modal_overlay {
   box-sizing: border-box;
 }
 
-/* Simple alert dialogs, session expiry, and notifications */
-#modal_overlay > .modal:not(:has(.cbi-map)):not(.cbi-modal) > div {
-  flex: 0 0 auto;
-  min-height: auto;
-  height: auto;
-  padding: 0;
-  overflow: visible;
+/* Pinned Sticky Actions Footer for all modals */
+#modal_overlay > .modal > .right,
+#modal_overlay > .modal > .button-row,
+#modal_overlay > .modal > .modal-footer,
+#modal_overlay > .modal > .cbi-page-actions {
+  position: sticky;
+  bottom: 0;
+  z-index: 20;
+  margin-top: auto;
+  padding: 12px 24px;
+  background: rgba(13, 18, 30, 0.98);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+/* Generic modal content padding */
+#modal_overlay > .modal > ul,
+#modal_overlay > .modal > p,
+#modal_overlay > .modal > div:not(.right):not(.button-row):not(.modal-header):not(.modal-footer):not(.cbi-page-actions):not(.cbi-map):not(form) {
+  padding-left: 24px;
+  padding-right: 24px;
 }
 
 #modal_overlay > .modal:not(:has(.cbi-map)) > h4,
