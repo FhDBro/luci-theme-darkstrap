@@ -31,7 +31,9 @@
 
 ---
 
-## Quick install
+## Installation
+
+### Option 1: Quick Install (Recommended)
 
 Run this command on your router via SSH:
 
@@ -39,14 +41,34 @@ Run this command on your router via SSH:
 curl -sSL https://raw.githubusercontent.com/FhDBro/luci-theme-darkstrap/main/install.sh | sh
 ```
 
-Or install via package manager once available in feeds:
+### Option 2: Pre-built Packages (Releases)
+
+Download the package matching your OpenWrt release from [Releases](https://github.com/FhDBro/luci-theme-darkstrap/releases) and transfer it to `/tmp`:
 
 ```sh
 # OpenWrt 25.12.x / 24.10+ (apk)
-apk add luci-theme-darkstrap
+apk add --allow-untrusted /tmp/luci-theme-darkstrap-*.apk
 
 # OpenWrt 23.05 / 22.03 / 21.02 (opkg)
-opkg install luci-theme-darkstrap
+opkg install /tmp/luci-theme-darkstrap_*.ipk
+```
+
+### Uninstallation
+
+To revert back to the default theme:
+
+```sh
+curl -sSL https://raw.githubusercontent.com/FhDBro/luci-theme-darkstrap/main/uninstall.sh | sh
+```
+
+Or via package manager:
+
+```sh
+# apk
+apk del luci-theme-darkstrap
+
+# opkg
+opkg remove luci-theme-darkstrap
 ```
 
 ---
