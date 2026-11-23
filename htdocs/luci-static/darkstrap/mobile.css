@@ -402,12 +402,24 @@
     padding: 12px 14px 24px !important;
   }
 
-  /* Generic modal content (package details, alerts, file info) padding */
+  /* Generic modal content (package details, alerts, file info) padding & spacing */
   #modal_overlay .modal > ul,
   #modal_overlay .modal > p,
   #modal_overlay .modal > div:not(.right):not(.button-row):not(.modal-header):not(.modal-footer):not(.cbi-page-actions):not(.cbi-map):not(form) {
     padding-left: 16px !important;
     padding-right: 16px !important;
+  }
+
+  #modal_overlay .modal > ul:first-of-type,
+  #modal_overlay .modal > p:first-of-type,
+  #modal_overlay .modal > div:not(.right):not(.button-row):not(.modal-header):not(.modal-footer):not(.cbi-page-actions):not(.cbi-map):not(form):first-of-type {
+    margin-top: 14px !important;
+  }
+
+  #modal_overlay .modal > ul:last-of-type,
+  #modal_overlay .modal > p:last-of-type,
+  #modal_overlay .modal > div:not(.right):not(.button-row):not(.modal-header):not(.modal-footer):not(.cbi-page-actions):not(.cbi-map):not(form):last-of-type {
+    margin-bottom: 16px !important;
   }
 
   /* Modal tabs horizontal scroll */

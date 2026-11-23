@@ -2931,7 +2931,7 @@ body.modal-overlay-active #modal_overlay {
   flex-shrink: 0;
 }
 
-/* Generic modal content padding */
+/* Generic modal content padding & breathing space */
 #modal_overlay > .modal > ul,
 #modal_overlay > .modal > p,
 #modal_overlay > .modal > div:not(.right):not(.button-row):not(.modal-header):not(.modal-footer):not(.cbi-page-actions):not(.cbi-map):not(form) {
@@ -2939,17 +2939,19 @@ body.modal-overlay-active #modal_overlay {
   padding-right: 24px;
 }
 
-#modal_overlay > .modal:not(:has(.cbi-map)) > h4,
-#modal_overlay > .modal:not(:has(.cbi-map)) > h2 {
-  font-size: 16px;
-  font-weight: 600;
-  color: #f8fafc;
-  margin: 0 0 12px 0;
-  border-bottom: none;
-  padding: 0;
+#modal_overlay > .modal > ul:first-of-type,
+#modal_overlay > .modal > p:first-of-type,
+#modal_overlay > .modal > div:not(.right):not(.button-row):not(.modal-header):not(.modal-footer):not(.cbi-page-actions):not(.cbi-map):not(form):first-of-type {
+  margin-top: 16px;
 }
 
-#modal_overlay > .modal:not(:has(.cbi-map)) .alert-message.warning {
+#modal_overlay > .modal > ul:last-of-type,
+#modal_overlay > .modal > p:last-of-type,
+#modal_overlay > .modal > div:not(.right):not(.button-row):not(.modal-header):not(.modal-footer):not(.cbi-page-actions):not(.cbi-map):not(form):last-of-type {
+  margin-bottom: 20px;
+}
+
+#modal_overlay > .modal .alert-message.warning {
   margin: 0 0 16px 0;
   padding: 12px 14px;
   background: rgba(255, 176, 32, 0.08);
@@ -2958,12 +2960,6 @@ body.modal-overlay-active #modal_overlay {
   color: #fde68a;
   font-size: 13px;
   line-height: 1.5;
-}
-
-#modal_overlay > .modal:not(:has(.cbi-map)) .right {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 14px;
 }
 
 /* Applying configuration status spinner */
