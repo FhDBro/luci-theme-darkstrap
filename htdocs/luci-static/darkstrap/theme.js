@@ -23,11 +23,26 @@
     return value;
   }
 
+  function parseProgressPercent(bar, rawTitle) {
+    var inner = bar.firstElementChild;
+    if (inner && inner.style && inner.style.width) {
+      var wm = String(inner.style.width).match(/(\d+(?:\.\d+)?)\s*%/);
+      if (wm) return parseFloat(wm[1]);
+    }
+    var tm = String(rawTitle || '').match(/(\d+(?:\.\d+)?)\s*%/);
+    return tm ? parseFloat(tm[1]) : NaN;
+  }
+
   function addProgressNumbers(root) {
     qsa('.cbi-progressbar[title], .progress[title]', root).forEach(function (bar) {
-      var text = compactProgressTitle(bar.getAttribute('title'));
+      var rawTitle = bar.getAttribute('title') || '';
+      var text = compactProgressTitle(rawTitle);
       if (!text) return;
+      var pct = parseProgressPercent(bar, rawTitle);
       bar.classList.add('darkstrap-title-numbered');
+      bar.classList.toggle('darkstrap-progress-used', rawTitle.indexOf('/') !== -1);
+      bar.classList.toggle('darkstrap-progress-high', isFinite(pct) && pct >= 80);
+      bar.classList.toggle('darkstrap-progress-warn', isFinite(pct) && pct >= 60 && pct < 80);
       var span = bar.querySelector('.darkstrap-progress-title');
       if (!span) {
         span = document.createElement('span');
@@ -38,31 +53,49 @@
     });
   }
 
+  function directChildMatch(parent, sel) {
+    if (!parent || !parent.children) return null;
+    for (var i = 0; i < parent.children.length; i++) {
+      var child = parent.children[i];
+      if (child.matches && child.matches(sel)) return child;
+    }
+    return null;
+  }
+
   function descriptionContainer(desc) {
+    if (desc.matches && desc.matches('.cbi-map-descr')) {
+      return desc.closest('.cbi-map');
+    }
     if (desc.matches && desc.matches('.cbi-section-descr, .cbi-section-table-descr, .cbi-tblsection-descr')) {
-      return desc.closest('.cbi-section, .cbi-tblsection') || desc.parentElement;
+      return desc.closest('.cbi-section, .cbi-tblsection');
     }
     if (desc.matches && desc.matches('.cbi-tab-descr')) {
-      return desc.closest('.cbi-tabcontainer, .tab-pane') || desc.parentElement;
+      return desc.closest('.cbi-tabcontainer, .tab-pane');
     }
-    return desc.closest('.cbi-value') || desc.closest('.tr') || desc.closest('tr') || desc.closest('.cbi-section') || desc.parentElement;
+    return desc.closest('.cbi-value') || desc.closest('.tr') || desc.closest('tr');
   }
 
   function findTitleElement(container, desc) {
-    if (container.classList.contains('cbi-section') || container.classList.contains('cbi-tblsection')) {
-      var header = container.querySelector('legend, h3, h2, h1, .cbi-title');
-      if (header) return header;
+    if (!container) return null;
+    if (desc.matches && desc.matches('.cbi-map-descr')) {
+      return directChildMatch(container, 'h2, h1, h3');
     }
-    var title = container.querySelector('.cbi-value-title, label.cbi-value-title');
-    if (title) return title;
-    var legend = container.querySelector('legend, h3, h2, h1');
-    if (legend) return legend;
-    var label = container.querySelector('label');
-    if (label) return label;
-    // In tables, only use td if it does not contain empty state messages
-    var firstTd = container.querySelector('.td:first-child, td:first-child');
-    if (firstTd && !firstTd.textContent.includes('no values') && !firstTd.querySelector('.alert, .notice')) {
-      return firstTd;
+    if (desc.matches && desc.matches('.cbi-section-descr, .cbi-section-table-descr, .cbi-tblsection-descr')) {
+      return directChildMatch(container, 'legend, h3, h2, h1, .cbi-title');
+    }
+    if (desc.matches && desc.matches('.cbi-tab-descr')) {
+      return directChildMatch(container, 'legend, h3, h2, h1');
+    }
+    if (container.matches && container.matches('.cbi-value')) {
+      return container.querySelector('.cbi-value-title, label.cbi-value-title, label');
+    }
+    if (container.matches && container.matches('.tr, tr')) {
+      var titleCell = container.querySelector('.cbi-value-title, label.cbi-value-title');
+      if (titleCell) return titleCell;
+      var firstTd = container.querySelector('.td:first-child, td:first-child');
+      if (firstTd && !firstTd.textContent.includes('no values') && !firstTd.querySelector('.alert, .notice')) {
+        return firstTd;
+      }
     }
     return null;
   }
@@ -88,26 +121,29 @@
 
       var container = descriptionContainer(desc);
       if (!container) return;
-      desc.classList.add('darkstrap-help-managed');
-
-      if (!desc.id) desc.id = 'darkstrap-help-' + Math.random().toString(36).slice(2, 10);
-      if (root.querySelector('.darkstrap-help-btn[data-darkstrap-help-for="' + desc.id + '"]')) return;
 
       var titleEl = findTitleElement(container, desc);
       if (!titleEl) return;
 
-      // Avoid duplicate buttons on re-renders
+      if (!desc.id) desc.id = 'darkstrap-help-' + Math.random().toString(36).slice(2, 10);
       if (titleEl.querySelector('.darkstrap-help-btn[data-darkstrap-help-for="' + desc.id + '"]')) return;
+      if (root.querySelector && root.querySelector('.darkstrap-help-btn[data-darkstrap-help-for="' + desc.id + '"]')) return;
 
       desc.classList.add('darkstrap-help-managed');
+
+      var titleText = (titleEl.textContent || '').replace(/\?/g, '').replace(/\s+/g, ' ').trim();
+      var showLabel = titleText ? ('Show help for ' + titleText) : 'Show help';
+      var hideLabel = titleText ? ('Hide help for ' + titleText) : 'Hide help';
 
       var btn = document.createElement('button');
       btn.type = 'button';
       btn.className = 'darkstrap-help-btn';
-      btn.setAttribute('aria-label', 'Show help');
+      btn.setAttribute('aria-label', showLabel);
       btn.setAttribute('aria-expanded', 'false');
       btn.setAttribute('aria-controls', desc.id);
       btn.setAttribute('data-darkstrap-help-for', desc.id);
+      btn.setAttribute('data-show-label', showLabel);
+      btn.setAttribute('data-hide-label', hideLabel);
       btn.textContent = '?';
 
       btn.addEventListener('pointerdown', function (ev) {
@@ -128,7 +164,7 @@
         var isOpen = desc.classList.toggle('darkstrap-help-open');
         btn.classList.toggle('darkstrap-help-active', isOpen);
         btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-        btn.setAttribute('aria-label', isOpen ? 'Hide help' : 'Show help');
+        btn.setAttribute('aria-label', isOpen ? hideLabel : showLabel);
       });
 
       titleEl.appendChild(btn);
@@ -183,6 +219,15 @@
   }
 
   var lockedScrollY = 0;
+  var lastKnownScrollY = 0;
+
+  if (typeof window !== 'undefined' && window.addEventListener) {
+    window.addEventListener('scroll', function () {
+      if (!modalIsOpen() && (!document.body || !document.body.classList.contains('darkstrap-modal-open'))) {
+        lastKnownScrollY = window.scrollY || (document.documentElement && document.documentElement.scrollTop) || 0;
+      }
+    }, { passive: true });
+  }
 
   function modalIsOpen() {
     return document.body ? document.body.classList.contains('modal-overlay-active') : false;
@@ -191,7 +236,8 @@
   function setModalScrollLock(lock) {
     if (!document.body || !document.documentElement) return;
     if (lock && !document.body.classList.contains('darkstrap-modal-open')) {
-      lockedScrollY = window.scrollY || document.documentElement.scrollTop || 0;
+      var curY = window.scrollY || document.documentElement.scrollTop || 0;
+      lockedScrollY = curY > 0 ? curY : lastKnownScrollY;
       document.documentElement.classList.add('darkstrap-modal-open');
       document.body.classList.add('darkstrap-modal-open');
       document.body.style.top = '-' + lockedScrollY + 'px';
@@ -201,6 +247,7 @@
       document.body.classList.remove('darkstrap-modal-open');
       document.body.style.top = '';
       window.scrollTo(0, lockedScrollY);
+      lastKnownScrollY = lockedScrollY;
     }
   }
 
@@ -259,7 +306,8 @@
       if (!preview) return;
 
       var previewText = (preview.textContent || '').replace(/\s+/g, ' ').trim().toLowerCase();
-      var isSaveApply = drop.classList.contains('cbi-button-apply') ||
+      var isSaveApply = drop.classList.contains('darkstrap-save-apply-combo') ||
+        drop.classList.contains('cbi-button-apply') ||
         (previewText.indexOf('save') !== -1 && previewText.indexOf('apply') !== -1);
 
       if (!isSaveApply) return;
@@ -270,26 +318,31 @@
       if (!items.length) return;
 
       var main = items.filter(function (item) {
-        return item.hasAttribute('display') || item.hasAttribute('selected');
+        return item.hasAttribute('selected');
+      })[0] || items.filter(function (item) {
+        return item.hasAttribute('display');
       })[0] || null;
 
+      if (!main) {
+        main = items.filter(function (item) {
+          var text = (item.textContent || '').replace(/\s+/g, ' ').trim().toLowerCase();
+          return text.indexOf('unchecked') === -1 && item.getAttribute('aria-hidden') !== 'true';
+        })[0] || items[0];
+      }
+
       items.forEach(function (item) {
-        var text = (item.textContent || '').replace(/\s+/g, ' ').trim().toLowerCase();
-        var isUnchecked = text.indexOf('unchecked') !== -1;
         item.classList.remove('darkstrap-action-preview-main');
         item.classList.remove('darkstrap-action-preview-extra');
 
-        if (isUnchecked || item.getAttribute('aria-hidden') === 'true')
+        if (item === main) {
+          item.classList.add('darkstrap-action-preview-main');
+        } else {
           item.classList.add('darkstrap-action-preview-extra');
-        else if (!main)
-          main = item;
+        }
       });
 
-      main = main || items[0];
       drop.classList.add('darkstrap-save-apply-combo');
       preview.classList.add('darkstrap-save-apply-preview');
-      main.classList.remove('darkstrap-action-preview-extra');
-      main.classList.add('darkstrap-action-preview-main');
     });
   }
 
@@ -309,102 +362,134 @@
 
   var graphObserver = null;
 
+  function parseSvgPoints(ptStr) {
+    var matches = String(ptStr || '').match(/-?\d+(?:\.\d+)?\s*,\s*-?\d+(?:\.\d+)?/g);
+    if (!matches) return [];
+    return matches.map(function (pair) {
+      var parts = pair.split(',');
+      return { x: parseFloat(parts[0]), y: parseFloat(parts[1]) };
+    }).filter(function (p) {
+      return isFinite(p.x) && isFinite(p.y);
+    });
+  }
+
+  function resolveGraphHeight(poly, pts) {
+    var svg = poly.ownerSVGElement;
+    if (svg) {
+      if (svg.viewBox && svg.viewBox.baseVal && svg.viewBox.baseVal.height > 0) {
+        return svg.viewBox.baseVal.height;
+      }
+      var hAttr = svg.getAttribute('height');
+      if (hAttr && String(hAttr).indexOf('%') === -1) {
+        var hNum = parseFloat(hAttr);
+        if (isFinite(hNum) && hNum > 0) return hNum;
+      }
+      if (svg.clientHeight > 0) return svg.clientHeight;
+    }
+    if (pts.length > 0 && pts[0].y > 0) return pts[0].y;
+    return 300;
+  }
+
+  function getOrCreateSiblingPath(poly, className) {
+    var path = poly.__darkstrapPath;
+    if (!path || path.parentNode !== poly.parentNode) {
+      path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      path.setAttribute('class', className);
+      poly.__darkstrapPath = path;
+      // Insert right after polyline so later SVG grid lines & axis <text> stay above curves
+      poly.parentNode.insertBefore(path, poly.nextSibling);
+    }
+    return path;
+  }
+
   function processGraphElements() {
     var polys = document.querySelectorAll('svg polyline');
     var arcs = document.querySelectorAll('#channel_graph svg polyline');
     if (!polys.length && !arcs.length) return;
 
     polys.forEach(function (poly) {
+      if ((poly.closest && poly.closest('#channel_graph')) || !poly.parentNode) return;
       var id = poly.getAttribute('id');
       if (!id) return;
 
-      var pathId = id + '-darkstrap-line';
-      var path = document.getElementById(pathId);
-      if (!path) {
-        path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-        path.id = pathId;
-        path.setAttribute('class', 'darkstrap-premium-line ' + id);
-        poly.parentNode.appendChild(path);
-      }
-
+      var path = getOrCreateSiblingPath(poly, 'darkstrap-premium-line ' + id);
       var ptStr = poly.getAttribute('points') || '';
       if (path.getAttribute('data-last-points') === ptStr) return;
       path.setAttribute('data-last-points', ptStr);
 
       try {
-        var ptsRaw = ptStr.trim().split(/\s+/);
-        if (ptsRaw.length > 3) {
-          var dataPts = ptsRaw.slice(1, ptsRaw.length - 1).map(function (p) {
-            var coords = p.split(',');
-            return { x: parseFloat(coords[0]), y: parseFloat(coords[1]) };
-          });
+        var pts = parseSvgPoints(ptStr);
+        if (pts.length < 2) return;
+        var graphHeight = resolveGraphHeight(poly, pts);
+        // Strip LuCI baseline fill anchors (0,H ... W,H) when present
+        var dataPts = (pts.length > 3 && pts[0].y >= graphHeight - 2 && pts[pts.length - 1].y >= graphHeight - 2)
+          ? pts.slice(1, pts.length - 1)
+          : pts;
+        if (dataPts.length < 2) return;
 
-          var validPts = dataPts.filter(function (p) { return !isNaN(p.x) && !isNaN(p.y); });
-          if (validPts.length > 1) {
-            var d = "M " + validPts[0].x + " " + validPts[0].y + " ";
-            for (var i = 0; i < validPts.length - 1; i++) {
-              var p1 = validPts[i];
-              var p2 = validPts[i + 1];
-              var midX = (p1.x + p2.x) / 2;
-              if (isNaN(midX)) {
-                d += "L " + p2.x + " " + p2.y + " ";
-              } else {
-                d += "C " + midX + " " + p1.y + ", " + midX + " " + p2.y + ", " + p2.x + " " + p2.y + " ";
-              }
-            }
-            path.setAttribute('d', d);
-            poly.style.opacity = '0';
-            poly.style.stroke = 'none';
-          }
+        var clamped = dataPts.map(function (p) {
+          return {
+            x: p.x,
+            y: Math.min(graphHeight - 2, Math.max(2, p.y))
+          };
+        });
+
+        var d = 'M ' + clamped[0].x + ' ' + clamped[0].y + ' ';
+        for (var i = 0; i < clamped.length - 1; i++) {
+          var p1 = clamped[i];
+          var p2 = clamped[i + 1];
+          var midX = (p1.x + p2.x) / 2;
+          d += 'C ' + midX + ' ' + p1.y + ', ' + midX + ' ' + p2.y + ', ' + p2.x + ' ' + p2.y + ' ';
         }
+        path.setAttribute('d', d);
+        poly.style.opacity = '0';
+        poly.style.stroke = 'none';
+        poly.style.fill = 'none';
       } catch (e) {}
     });
 
     arcs.forEach(function (arc) {
-      var id = arc.getAttribute('id');
-      if (!id) {
-        id = 'arc-' + Math.random().toString(36).slice(2, 10);
-        arc.setAttribute('id', id);
-      }
+      if (!arc.parentNode) return;
+      var inlineFill = arc.style ? (arc.style.fill || '') : '';
+      if (inlineFill.indexOf('url(') !== -1) return; // Keep GradientVerticalCenteredBlack inner mask untouched
 
-      var pathId = id + '-path';
-      var path = document.getElementById(pathId);
-      if (!path) {
-        path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-        path.id = pathId;
-        path.classList.add('darkstrap-channel-arc-premium');
-        arc.parentNode.appendChild(path);
-      }
+      var pts = parseSvgPoints(arc.getAttribute('points'));
+      if (pts.length !== 4) return;
 
+      var path = getOrCreateSiblingPath(arc, 'darkstrap-channel-arc-premium');
       var ptStr = arc.getAttribute('points') || '';
-      if (path.getAttribute('data-last-points') === ptStr) return;
-      path.setAttribute('data-last-points', ptStr);
-      var ptsRaw = ptStr.trim().split(/\s+/);
-      if (ptsRaw.length === 4) {
-        var p0 = ptsRaw[0].split(',');
-        var p1 = ptsRaw[1].split(',');
-        var p2 = ptsRaw[2].split(',');
-        var p3 = ptsRaw[3].split(',');
-
-        p0 = { x: parseFloat(p0[0]), y: parseFloat(p0[1]) };
-        p1 = { x: parseFloat(p1[0]), y: parseFloat(p1[1]) };
-        p2 = { x: parseFloat(p2[0]), y: parseFloat(p2[1]) };
-        p3 = { x: parseFloat(p3[0]), y: parseFloat(p3[1]) };
-
+      if (path.getAttribute('data-last-points') !== ptStr) {
+        path.setAttribute('data-last-points', ptStr);
+        var p0 = pts[0], p1 = pts[1], p2 = pts[2], p3 = pts[3];
         var midX = (p1.x + p2.x) / 2;
-        var d = "M " + p0.x + " " + p0.y +
-          " C " + p1.x + " " + p0.y + ", " + p1.x + " " + p1.y + ", " + midX + " " + p1.y +
-          " C " + p2.x + " " + p1.y + ", " + p2.x + " " + p3.y + ", " + p3.x + " " + p3.y;
-
+        var d = 'M ' + p0.x + ' ' + p0.y +
+          ' C ' + p1.x + ' ' + p0.y + ', ' + p1.x + ' ' + p1.y + ', ' + midX + ' ' + p1.y +
+          ' C ' + p2.x + ' ' + p1.y + ', ' + p2.x + ' ' + p3.y + ', ' + p3.x + ' ' + p3.y;
         path.setAttribute('d', d);
-        arc.style.opacity = '0';
-        arc.style.stroke = 'none';
-        arc.style.fill = 'none';
-        path.style.fill = 'none';
-        path.style.stroke = '#f59e0b';
-        path.style.strokeWidth = '3.5px';
-        path.style.strokeLinecap = 'round';
       }
+
+      var apStroke = (arc.style && arc.style.stroke) || arc.getAttribute('stroke') || '#38bdf8';
+      var apFill = (arc.style && arc.style.fill) || arc.getAttribute('fill') || 'none';
+      arc.style.opacity = '0';
+      arc.style.stroke = 'none';
+      arc.style.fill = 'none';
+      path.style.stroke = apStroke;
+      path.style.fill = apFill;
+      path.style.fillOpacity = apFill && apFill !== 'none' ? '0.24' : '0';
+      path.style.strokeWidth = '2.5px';
+      path.style.strokeLinecap = 'round';
+      path.style.strokeLinejoin = 'round';
+    });
+  }
+
+  var graphRafPending = false;
+  function scheduleGraphUpgrade() {
+    if (graphRafPending) return;
+    graphRafPending = true;
+    var raf = window.requestAnimationFrame || function (fn) { return setTimeout(fn, 16); };
+    raf(function () {
+      graphRafPending = false;
+      processGraphElements();
     });
   }
 
@@ -414,11 +499,27 @@
     if (!graphObserver && 'MutationObserver' in window) {
       var view = document.getElementById('view') || document.getElementById('maincontent') || document.body;
       if (view) {
-        graphObserver = new MutationObserver(function () {
-          processGraphElements();
+        graphObserver = new MutationObserver(function (records) {
+          for (var i = 0; i < records.length; i++) {
+            var r = records[i];
+            if (r.type === 'attributes' && r.attributeName === 'points') {
+              scheduleGraphUpgrade();
+              return;
+            }
+            if (r.type === 'childList' && r.addedNodes && r.addedNodes.length) {
+              for (var j = 0; j < r.addedNodes.length; j++) {
+                var n = r.addedNodes[j];
+                if (n && n.nodeType === 1 && (n.tagName === 'svg' || n.tagName === 'SVG' || n.tagName === 'polyline' || n.tagName === 'g' || (n.querySelector && n.querySelector('svg polyline')))) {
+                  scheduleGraphUpgrade();
+                  return;
+                }
+              }
+            }
+          }
         });
         graphObserver.observe(view, {
           subtree: true,
+          childList: true,
           attributes: true,
           attributeFilter: ['points']
         });
@@ -512,7 +613,7 @@
 
   function isDarkstrapInternalNode(node) {
     if (!node || node.nodeType !== 1) return false;
-    var sel = '.darkstrap-help-btn, .darkstrap-progress-title, #darkstrap-graph-defs, #darkstrap-mobile-toggle, #modal_overlay, .proc-gold-table, #indicators, #indicators *, header, header *, #topmenu, #topmenu *, #modemenu, #modemenu *, #wifi_assoclist_table, #wifi_assoclist_table *, svg, svg *, .darkstrap-premium-line, .darkstrap-premium-dome, .darkstrap-table-scroll-wrap, #dns-query-log, .cbi-dynlist, .cbi-dynlist *';
+    var sel = '.darkstrap-help-btn, .darkstrap-progress-title, #darkstrap-graph-defs, #darkstrap-mobile-toggle, #modal_overlay, #indicators, #indicators *, header, header *, #topmenu, #topmenu *, #modemenu, #modemenu *, #wifi_assoclist_table, #wifi_assoclist_table *, svg, svg *, .darkstrap-premium-line, .darkstrap-channel-arc-premium, .darkstrap-table-scroll-wrap, .cbi-dynlist, .cbi-dynlist *';
     if (node.matches && node.matches(sel)) return true;
     if (node.closest && node.closest(sel)) return true;
     return false;
@@ -584,6 +685,23 @@
     }
   }
 
+  function prefersReducedMotion() {
+    return !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  }
+
+  function closeMobileNav(restoreFocus) {
+    var toggle = document.getElementById('darkstrap-mobile-toggle');
+    if (document.body) document.body.classList.remove('darkstrap-mobile-menu-open');
+    if (toggle) {
+      toggle.classList.remove('active');
+      toggle.setAttribute('aria-expanded', 'false');
+      if (restoreFocus) toggle.focus();
+    }
+    qsa('#topmenu > li.dropdown.darkstrap-touch-open').forEach(function (li) {
+      li.classList.remove('darkstrap-touch-open');
+    });
+  }
+
   function initMobileNav() {
     var header = document.querySelector('header');
     if (!header || document.getElementById('darkstrap-mobile-toggle')) return;
@@ -593,6 +711,8 @@
     toggle.type = 'button';
     toggle.className = 'darkstrap-mobile-toggle-btn';
     toggle.setAttribute('aria-label', 'Toggle Navigation Menu');
+    toggle.setAttribute('aria-expanded', 'false');
+    toggle.setAttribute('aria-controls', 'topmenu');
 
     for (var b = 0; b < 3; b++) {
       var bar = document.createElement('span');
@@ -604,18 +724,18 @@
       ev.stopPropagation();
       var isOpen = document.body.classList.toggle('darkstrap-mobile-menu-open');
       toggle.classList.toggle('active', isOpen);
+      toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
     });
 
     document.addEventListener('click', function (ev) {
       if (document.body.classList.contains('darkstrap-mobile-menu-open')) {
         if (!ev.target.closest('#topmenu, #darkstrap-mobile-toggle')) {
-          document.body.classList.remove('darkstrap-mobile-menu-open');
-          toggle.classList.remove('active');
+          closeMobileNav(false);
         }
       }
     });
 
-    // Universal Event delegation for dropdown menus (desktop & mobile)
+    // Event delegation for dropdown menus (desktop & mobile)
     document.addEventListener('click', function (ev) {
       var menuLink = ev.target.closest('#topmenu > li.dropdown > a.menu');
       if (menuLink) {
@@ -641,29 +761,32 @@
     var pos = document.createElement('div');
     pos.className = 'darkstrap-abstract-positioner';
 
-    // Synchronize animation timeline across page loads and menu switches via localStorage
     var epochKey = 'darkstrap_bg_anim_epoch';
-    var epoch = localStorage.getItem(epochKey);
+    var epoch = null;
+    try { epoch = localStorage.getItem(epochKey); } catch (e) {}
     var now = Date.now();
     if (!epoch || isNaN(parseInt(epoch, 10))) {
       epoch = now;
       try { localStorage.setItem(epochKey, epoch); } catch (e) {}
     }
-    var cycleDuration = 52; // 52s compound 3D loop
+    var cycleDuration = 52;
     var elapsed = (now - parseInt(epoch, 10)) / 1000;
     var delayOffset = -(elapsed % cycleDuration);
 
     var spinner = document.createElement('div');
     spinner.className = 'darkstrap-abstract-spinner';
-    spinner.style.animationDelay = delayOffset.toFixed(3) + 's';
+    if (prefersReducedMotion()) {
+      spinner.style.animation = 'none';
+    } else {
+      spinner.style.animationDelay = delayOffset.toFixed(3) + 's';
+    }
 
-    // Depth layers
-    var depths = [-28, -14, 0, 14, 28];
-    var layerOpacities = [0.20, 0.28, 0.38, 0.30, 0.22];
-    for (var i = 0; i < depths.length; i++) {
+    // Two subtle layers keep GPU paint low while preserving depth
+    var layerIndices = [0, 2];
+    var layerOpacities = [0.22, 0.36];
+    for (var i = 0; i < layerIndices.length; i++) {
       var layer = document.createElement('div');
-      layer.className = 'darkstrap-abstract-layer darkstrap-layer-' + i;
-      layer.style.transform = 'translateZ(' + depths[i] + 'px)';
+      layer.className = 'darkstrap-abstract-layer darkstrap-layer-' + layerIndices[i];
       layer.style.opacity = layerOpacities[i];
       spinner.appendChild(layer);
     }
@@ -675,10 +798,14 @@
     }
   }
 
-  // Synchronize animation state
+  // Synchronize animation state while respecting prefers-reduced-motion
   function syncBgAnimation() {
     var spinner = document.querySelector('.darkstrap-abstract-spinner');
     if (!spinner) return;
+    if (prefersReducedMotion()) {
+      spinner.style.animationPlayState = 'paused';
+      return;
+    }
     var cycle = 52;
     var elapsed = (Date.now() / 1000) % cycle;
     spinner.style.animationDelay = '-' + elapsed.toFixed(3) + 's';
@@ -692,7 +819,7 @@
     }
   });
 
-  /* Navigation and modal handlers */
+  /* Navigation and modal helpers */
   function initFastNav() {
     document.addEventListener('click', function (ev) {
       var a = ev.target && ev.target.closest ? ev.target.closest('#topmenu a, #modemenu a') : null;
@@ -704,27 +831,18 @@
       }
     }, true);
 
-    // Modal dismissal handler
+    // Explicit declarative dismiss hook only; standard LuCI buttons run their own handlers
     document.addEventListener('click', function (ev) {
       var target = ev.target;
       if (!target) return;
-      var dismissBtn = target.closest('#modal_overlay .button-row button, #modal_overlay .right button, #modal_overlay button[class*="dismiss"], #modal_overlay [data-dismiss="modal"]');
+      var dismissBtn = target.closest('#modal_overlay [data-dismiss="modal"]');
       if (dismissBtn) {
-        var text = (dismissBtn.textContent || dismissBtn.value || '').trim().toLowerCase();
-        if (text === 'dismiss' || text === 'cancel' || text === 'close') {
-          setTimeout(function () {
-            if (window.L && window.L.hideModal) {
-              window.L.hideModal();
-            }
-            if (document.body) {
-              document.body.classList.remove('modal-overlay-active', 'darkstrap-modal-open');
-              document.body.style.top = '';
-            }
-            if (document.documentElement) {
-              document.documentElement.classList.remove('darkstrap-modal-open');
-            }
-          }, 10);
-        }
+        setTimeout(function () {
+          if (window.L && window.L.hideModal) {
+            window.L.hideModal();
+          }
+          setModalScrollLock(false);
+        }, 0);
       }
     }, true);
   }
@@ -845,41 +963,65 @@
     initMobileNav();
     initTooltipViewportGuards();
     run(document);
-    document.addEventListener('click', function (ev) {
-      if (ev.target.closest('.darkstrap-help-btn, .darkstrap-help-managed, .cbi-value, .cbi-section, .cbi-tabcontainer')) {
-        return; // Don't dismiss help while interacting with form fields
-      }
+    function closeOpenHelp(restoreFocus) {
       qsa('.darkstrap-help-managed.darkstrap-help-open').forEach(function (descEl) {
         descEl.classList.remove('darkstrap-help-open');
         var b = document.querySelector('.darkstrap-help-btn[data-darkstrap-help-for="' + descEl.id + '"]');
         if (b) {
           b.classList.remove('darkstrap-help-active');
           b.setAttribute('aria-expanded', 'false');
-          b.setAttribute('aria-label', 'Show help');
+          b.setAttribute('aria-label', b.getAttribute('data-show-label') || 'Show help');
+          if (restoreFocus && document.activeElement && (document.activeElement === b || descEl.contains(document.activeElement))) {
+            b.focus();
+          }
         }
       });
+    }
+
+    document.addEventListener('click', function (ev) {
+      if (ev.target.closest('.darkstrap-help-btn, .darkstrap-help-managed, .cbi-value, .cbi-section, .cbi-tabcontainer')) {
+        return; // Don't dismiss help while interacting with form fields
+      }
+      closeOpenHelp(false);
     });
     if ('MutationObserver' in window && document.body) {
       new MutationObserver(scheduleFromMutations).observe(document.body, { childList: true, subtree: true });
-      // Reset scroll lock when modal closes
-      new MutationObserver(function () {
-        if (!document.body.classList.contains('modal-overlay-active')) {
-          if (document.body.classList.contains('darkstrap-modal-open')) {
-            document.body.classList.remove('darkstrap-modal-open');
-            document.body.style.top = '';
-          }
-          if (document.documentElement && document.documentElement.classList.contains('darkstrap-modal-open')) {
-            document.documentElement.classList.remove('darkstrap-modal-open');
-          }
+      // Sync Save & Apply button face when LuCI switches the active option attribute
+      new MutationObserver(function (records) {
+        var touched = [];
+        for (var k = 0; k < records.length; k++) {
+          var rec = records[k];
+          var drop = rec.target && rec.target.closest ? rec.target.closest('.cbi-page-actions .cbi-dropdown.cbi-button, .actions .cbi-dropdown.cbi-button') : null;
+          if (drop && touched.indexOf(drop) === -1) touched.push(drop);
         }
+        touched.forEach(normalizeActionDropdowns);
+      }).observe(document.body, { attributes: true, attributeFilter: ['selected', 'display'], subtree: true });
+      // Restore scroll position & clear lock whenever modal-overlay-active toggles
+      new MutationObserver(function () {
+        setModalScrollLock(modalIsOpen());
       }).observe(document.body, { attributes: true, attributeFilter: ['class'] });
     }
+    document.addEventListener('cbi-dropdown-change', function (ev) {
+      var drop = ev.target && ev.target.closest ? ev.target.closest('.cbi-page-actions .cbi-dropdown.cbi-button, .actions .cbi-dropdown.cbi-button') : null;
+      if (drop) normalizeActionDropdowns(drop);
+    });
     document.addEventListener('keydown', function (ev) {
       if (ev.key === 'Escape') {
+        if (document.body && document.body.classList.contains('darkstrap-mobile-menu-open')) {
+          closeMobileNav(true);
+        }
+        qsa('#topmenu > li.dropdown.darkstrap-touch-open').forEach(function (li) {
+          li.classList.remove('darkstrap-touch-open');
+        });
+        closeOpenHelp(true);
         setTimeout(function () { setModalScrollLock(modalIsOpen()); }, 0);
       }
     }, true);
-    document.addEventListener('click', function () {
+    document.addEventListener('click', function (ev) {
+      var drop = ev.target && ev.target.closest ? ev.target.closest('.cbi-page-actions .cbi-dropdown.cbi-button, .actions .cbi-dropdown.cbi-button') : null;
+      if (drop) {
+        setTimeout(function () { normalizeActionDropdowns(drop); }, 0);
+      }
       setTimeout(function () { setModalScrollLock(modalIsOpen()); }, 0);
     }, true);
   });

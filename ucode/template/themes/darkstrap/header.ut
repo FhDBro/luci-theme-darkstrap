@@ -23,8 +23,8 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<meta name="darkreader-lock">
 		<link rel="preload" href="{{ media }}/abstract-form.svg" as="image" type="image/svg+xml">
-		<link rel="stylesheet" href="{{ media }}/cascade.css">
-		<link rel="stylesheet" media="only screen and (max-width: 854px)" href="{{ media }}/mobile.css">
+		<link rel="stylesheet" href="{{ media }}/cascade.css?v={{ version?.luciversion ?? '26' }}-ds1">
+		<link rel="stylesheet" media="only screen and (max-width: 854px)" href="{{ media }}/mobile.css?v={{ version?.luciversion ?? '26' }}-ds1">
 		
 		<link rel="icon" href="{{ media }}/logo.svg" sizes="any" type="image/svg+xml">
 		<link rel="icon" type="image/png" sizes="32x32" href="{{ media }}/logo-32.png">
@@ -39,8 +39,8 @@
 		<style title="text/css">{{ css }}</style>
 		{% endif %}
 		<script src="{{ dispatcher.build_url('admin/translations', dispatcher.lang) }}"></script>
-		<script src="{{ resource }}/cbi.js"></script>
-		<script defer src="{{ media }}/theme.js"></script>
+		<script src="{{ resource }}/cbi.js?v={{ version?.luciversion ?? '26' }}"></script>
+		<script defer src="{{ media }}/theme.js?v={{ version?.luciversion ?? '26' }}-ds1"></script>
 	</head>
 
 	<body class="lang_{{ dispatcher.lang }} {{ entityencode(striptags(node?.title ?? ''), true) }}" data-page="{{ entityencode(join('-', ctx.request_path), true) }}">
@@ -48,23 +48,23 @@
 			<div class="darkstrap-abstract-positioner">
 				<div class="darkstrap-abstract-spinner">
 					<div class="darkstrap-abstract-layer darkstrap-layer-0"></div>
-					<div class="darkstrap-abstract-layer darkstrap-layer-1"></div>
 					<div class="darkstrap-abstract-layer darkstrap-layer-2"></div>
-					<div class="darkstrap-abstract-layer darkstrap-layer-3"></div>
-					<div class="darkstrap-abstract-layer darkstrap-layer-4"></div>
 				</div>
 			</div>
 		</div>
 		<script>
 		(function() {
 			try {
+				var spin = document.querySelector('.darkstrap-abstract-spinner');
+				if (!spin) return;
+				if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+					spin.style.animation = 'none';
+					return;
+				}
 				var cycle = 52;
 				var elapsed = (Date.now() / 1000) % cycle;
-				var spin = document.querySelector('.darkstrap-abstract-spinner');
-				if (spin) {
-					spin.style.animationDelay = '-' + elapsed.toFixed(3) + 's';
-					spin.style.animationPlayState = 'running';
-				}
+				spin.style.animationDelay = '-' + elapsed.toFixed(3) + 's';
+				spin.style.animationPlayState = 'running';
 			} catch(e) {}
 		})();
 		</script>
@@ -75,7 +75,7 @@
 			<div id="indicators" class="pull-right"></div>
 		</header>
 
-		<div id="maincontent" class="container">
+		<div id="maincontent" class="container" role="main">
 			{% if (getuid() == 0 && getspnam('root')?.pwdp === ''): %}
 				<div class="alert-message warning">
 					<h4>{{ _('No password set!') }}</h4>
