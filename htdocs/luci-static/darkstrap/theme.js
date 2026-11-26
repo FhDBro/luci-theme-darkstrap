@@ -3,6 +3,10 @@
   if (window.__darkstrapThemeJs) return;
   window.__darkstrapThemeJs = true;
 
+  function tr(s) {
+    return (typeof window._ === 'function') ? window._(s) : s;
+  }
+
   function qsa(sel, root) {
     root = root || document;
     var nodes = [];
@@ -122,7 +126,7 @@
       var container = descriptionContainer(desc);
       if (!container) return;
 
-      var titleEl = findTitleElement(container, desc);
+      var titleEl = findTitleElement(container);
       if (!titleEl) return;
 
       if (!desc.id) desc.id = 'darkstrap-help-' + Math.random().toString(36).slice(2, 10);
@@ -132,8 +136,8 @@
       desc.classList.add('darkstrap-help-managed');
 
       var titleText = (titleEl.textContent || '').replace(/\?/g, '').replace(/\s+/g, ' ').trim();
-      var showLabel = titleText ? ('Show help for ' + titleText) : 'Show help';
-      var hideLabel = titleText ? ('Hide help for ' + titleText) : 'Hide help';
+      var showLabel = titleText ? (tr('Show help') + ': ' + titleText) : tr('Show help');
+      var hideLabel = titleText ? (tr('Hide help') + ': ' + titleText) : tr('Hide help');
 
       var btn = document.createElement('button');
       btn.type = 'button';
@@ -710,7 +714,7 @@
     toggle.id = 'darkstrap-mobile-toggle';
     toggle.type = 'button';
     toggle.className = 'darkstrap-mobile-toggle-btn';
-    toggle.setAttribute('aria-label', 'Toggle Navigation Menu');
+    toggle.setAttribute('aria-label', tr('Toggle Navigation Menu'));
     toggle.setAttribute('aria-expanded', 'false');
     toggle.setAttribute('aria-controls', 'topmenu');
 
@@ -970,7 +974,7 @@
         if (b) {
           b.classList.remove('darkstrap-help-active');
           b.setAttribute('aria-expanded', 'false');
-          b.setAttribute('aria-label', b.getAttribute('data-show-label') || 'Show help');
+          b.setAttribute('aria-label', b.getAttribute('data-show-label') || tr('Show help'));
           if (restoreFocus && document.activeElement && (document.activeElement === b || descEl.contains(document.activeElement))) {
             b.focus();
           }

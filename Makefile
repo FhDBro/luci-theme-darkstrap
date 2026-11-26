@@ -7,7 +7,7 @@
 include $(TOPDIR)/rules.mk
 
 LUCI_TITLE:=Darkstrap Theme
-LUCI_DEPENDS:=+luci-base
+LUCI_DEPENDS:=+luci-base +luci-theme-bootstrap
 PKG_LICENSE:=Apache-2.0
 
 define Package/luci-theme-darkstrap/postrm
